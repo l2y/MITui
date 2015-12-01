@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <link rel="stylesheet" type="text/css" href="animate.css" />
+    <script src="recorder.js"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src="main.js"></script>
+    <title>Automated MIT</title>
+</head>
+    
+<body>
+    
+<!--
+<div ng-app="" data-ng-init="firstName='John'">
+ 	<p>Name: <input type="text" ng-model="firstName"></p>
+ 	<p ng-bind="name"></p>
+</div>
+-->
+    
+<!-- Main Screen -->
+<div id="main-screen" ng-app="myApp" ng-controller="myCtrl">
+    <div class="show">
+        <div class="above-transparent middle">Instructions will go here!</div>
+        <img id="start" class="above-transparent" src="images/start.png" alt="START" ng-click="start($event)">
+    </div>
+    
+    <div id="action-screen">
+        <div id="opening-screen" class="show" style="overflow:hidden">
+            <!--    <button type="button" class="btn btn-default above-transparent" onclick='console.log("Hello")'>Start</button>-->
+            <div class="circle"></div>
+            <div class="blue"></div>
+        </div>
+
+        <div class="word-area">
+            <img id="word" src="images/water.jpg" alt="WATER">
+            <img class="image" src="images/water_image.jpg" alt="WATER IMAGE">
+            <!--    a blinking light to represent the physical feedback-->
+        </div>
+        
+        <!--    the visual representation of the person's created waveform - this will be dynamic..-->
+        <canvas id="analyser" width="1000px" height="100">
+        </canvas> 
+        
+        <!--    the visual representation of the waveform - constant except for when in moton ..-->
+        <div id="example-analyser">
+            <img id="{{$index}}" ng-repeat="x in soundValues track by $index" ng-src="{{ getSoundImageFromValue(x) }}" class="sound">
+        </div>
+        
+        <img class="end" id="end" src="images/end.jpg" alt="FINISH" onclick="endSession()">
+    </div>
+    
+    <!-- Continue Screen -->
+    <div id="continue-screen" class="hidden">
+        <div>
+            <img class="above-transparent" id="retry" src="images/retry.png" alt="RETRY" onclick="sameSession()">
+            <img class="above-transparent" id="next-exercise" src="images/next.png" alt="NEXT" onclick="nextSession()">
+        </div>
+
+        <div class="transparent"></div>
+    </div>  
+</div>
+    
+</body>
+</html>
