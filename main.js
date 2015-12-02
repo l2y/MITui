@@ -278,3 +278,8 @@ function beginSession() {
         $("#action-screen").removeClass("show");  
     }
 }
+
+function setStatistic(id, value) {
+    $("#" + id).empty();
+    $("#" + id).html(value);
+}
