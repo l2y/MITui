@@ -20,30 +20,23 @@
     
 <body>
     
-<!--
-<div ng-app="" data-ng-init="firstName='John'">
- 	<p>Name: <input type="text" ng-model="firstName"></p>
- 	<p ng-bind="name"></p>
-</div>
--->
-    
 <!-- Main Screen -->
 <div id="main-screen" ng-app="myApp" ng-controller="myCtrl">
-    <div class="show">
-        <div class="above-transparent middle">Instructions will go here!</div>
+    <div id="start-screen" class="show">
+        <div id="start-instruction" class="above-transparent middle">Instructions will go here!</div>
         <img id="start" class="above-transparent" src="images/start.png" alt="START" ng-click="start($event)">
-    </div>
-    
-    <div id="action-screen">
         <div id="opening-screen" class="show" style="overflow:hidden">
-            <!--    <button type="button" class="btn btn-default above-transparent" onclick='console.log("Hello")'>Start</button>-->
             <div class="circle"></div>
             <div class="blue"></div>
         </div>
+    </div>
+    
+    <div id="action-screen">
 
         <div class="word-area">
-            <img id="word" src="images/water.jpg" alt="WATER">
-            <img class="image" src="images/water_image.jpg" alt="WATER IMAGE">
+            <img id="word" class="header" src="images/water.jpg" alt="WATER">
+            <div id="action-instruction" class="header">INSTRUCTION</div>
+            <img class="image" class="header" src="images/water_image.jpg" alt="WATER IMAGE">
             <!--    a blinking light to represent the physical feedback-->
         </div>
         
@@ -53,15 +46,15 @@
         
         <!--    the visual representation of the waveform - constant except for when in moton ..-->
         <div id="example-analyser">
-            <img id="{{$index}}" ng-repeat="x in soundValues track by $index" ng-src="{{ getSoundImageFromValue(x) }}" class="sound">
+            
         </div>
         
-        <img class="end" id="end" src="images/end.jpg" alt="FINISH" onclick="endSession()">
+<!--        <img class="end" id="end" src="images/end.jpg" alt="FINISH" onclick="endSession()">-->
     </div>
     
     <!-- Continue Screen -->
     <div id="continue-screen" class="hidden">
-        <div>
+        <div id="continue-button">
             <img class="above-transparent" id="retry" src="images/retry.png" alt="RETRY" onclick="sameSession()">
             <img class="above-transparent" id="next-exercise" src="images/next.png" alt="NEXT" onclick="nextSession()">
         </div>

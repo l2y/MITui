@@ -81,11 +81,36 @@ body {
 }
 
 .image {
-    padding-left:500px;
+    padding-left:200px;
 }
 
 .end {
     position:fixed;
     bottom:0;
     right:45%;
+}
+#action-instruction {
+    padding-left:200px;
+}
+
+.header {
+    float:left;
+}
+
+div {
+    font-size:large;
+    font-weight:bold;
+}
+
+#continue-button {
+    top:20%;
+    position:absolute;
+}
+
+#retry {
+    padding:50px; 
+}
+
+#next-exercise {
+    padding:50px;
 }
