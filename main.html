@@ -23,7 +23,7 @@
 <!-- Main Screen -->
 <div id="main-screen" ng-app="myApp" ng-controller="myCtrl">
     
-    <div id="start-screen">
+    <div id="start-screen" class="show">
         <div id="start-instruction" class="above-transparent">Instructions will go here!</div>
         <img id="start" class="above-transparent" src="images/start.png" alt="START" ng-click="start($event)">
     </div>
@@ -63,6 +63,93 @@
 
         <div class="transparent"></div>
     </div>  
+    
+    <div id="stats-screen" class="hidden">
+        <img class="above-transparent" id="stats-header" src="images/stats_header.png" alt="STATISTICS">
+        
+        <img class="stats-image-entry" id="pitch-accuracy" src="images/stats-entry.png" alt="PITCH ACCURACY">
+        <img class="stats-image-entry" id="high-pitch" src="images/stats-sub-entry.png" alt="HIGH PITCH">
+        <img class="stats-image-entry" id="low-pitch" src="images/stats-sub-entry.png" alt="LOW PITCH">
+        
+        <img class="stats-image-entry" id="overall-progress" src="images/stats-entry.png" alt="OVERALL PROGRESS">
+        
+        <img class="stats-image-entry" id="errors" src="images/stats-entry.png" alt="ERRORS">
+        <img class="stats-image-entry" id="error-additon" src="images/stats-sub-entry.png" alt="ADDITION">
+        <img class="stats-image-entry" id="error-anticipation" src="images/stats-sub-entry.png" alt="ANTICIPATION">
+        <img class="stats-image-entry" id="error-blends" src="images/stats-sub-entry.png" alt="BLENDS">
+        <img class="stats-image-entry" id="error-deletion" src="images/stats-sub-entry.png" alt="DELETION">
+        <img class="stats-image-entry" id="error-exchange" src="images/stats-sub-entry.png" alt="EXCHANGE">
+        <img class="stats-image-entry" id="error-misdeviation" src="images/stats-sub-entry.png" alt="MISDEVIATION">
+        <img class="stats-image-entry" id="error-perseveration" src="images/stats-sub-entry.png" alt="PERSEVERATION">
+        <img class="stats-image-entry" id="error-shift" src="images/stats-sub-entry.png" alt="SHIFT">
+        
+        <table class="stats-table">
+            <tr class="stats-entry">
+                <td class="stats-entry-text">Pitch Accuracy</td>
+                <td class="stats-entry-score">10</td>
+            </tr>
+            <tr class="stats-spacing"></tr>
+            <tr class="stats-sub-entry">
+                <td class="stats-sub-entry-text">High Pitch</td>
+                <td class="stats-sub-entry-score">10</td>
+            </tr>
+            <tr class="stats-spacing"></tr>
+            <tr class="stats-sub-entry">
+                <td class="stats-sub-entry-text">Low Pitch</td>
+                <td class="stats-sub-entry-score">10</td>
+            </tr>
+            <tr class="stats-spacing"></tr>
+            <tr class="stats-entry">
+                <td class="stats-entry-text">Overall Progress</td>
+                <td class="stats-entry-score">10</td>
+            </tr>
+            <tr class="stats-spacing"></tr>
+            <tr class="stats-entry">
+                <td class="stats-entry-text">Errors</td>
+                <td class="stats-entry-score">10</td>
+            </tr>
+            <tr class="stats-spacing"></tr>
+            <tr class="stats-sub-entry">
+                <td class="stats-sub-entry-text">Addition</td>
+                <td class="stats-sub-entry-score">10</td>
+            </tr>
+            <tr class="stats-spacing"></tr>
+            <tr class="stats-sub-entry">
+                <td class="stats-sub-entry-text">Anticipation</td>
+                <td class="stats-sub-entry-score">10</td>
+            </tr>
+            <tr class="stats-spacing"></tr>
+            <tr class="stats-sub-entry">
+                <td class="stats-sub-entry-text">Blends</td>
+                <td class="stats-sub-entry-score">10</td>
+            </tr>
+            <tr class="stats-spacing"></tr>
+            <tr class="stats-sub-entry">
+                <td class="stats-sub-entry-text">Deletion</td>
+                <td class="stats-sub-entry-score">10</td>
+            </tr>
+            <tr class="stats-spacing"></tr>
+            <tr class="stats-sub-entry">
+                <td class="stats-sub-entry-text">Exchange</td>
+                <td class="stats-sub-entry-score">10</td>
+            </tr>
+            <tr class="stats-spacing"></tr>
+            <tr class="stats-sub-entry">
+                <td class="stats-sub-entry-text">Misdeviation</td>
+                <td class="stats-sub-entry-score">10</td>
+            </tr>
+            <tr class="stats-spacing"></tr>
+            <tr class="stats-sub-entry">
+                <td class="stats-sub-entry-text">Perseveration</td>
+                <td class="stats-sub-entry-score">10</td>
+            </tr>
+            <tr class="stats-spacing"></tr>
+            <tr class="stats-sub-entry">
+                <td class="stats-sub-entry-text">Shift</td>
+                <td class="stats-sub-entry-score">10</td>
+            </tr>
+        </table>
+    </div>
 </div>
     
 </body>

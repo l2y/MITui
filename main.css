@@ -61,8 +61,6 @@ div.open {
 }
 
 html, body {
-    overflow-y:hidden;
-    overflow-x:hidden;
     height:100%;
     width:100%;
 }
@@ -81,7 +79,7 @@ body {
 }
 
 .image {
-    padding-left:200px;
+    padding-left:150px;
 }
 
 .end {
@@ -122,4 +120,42 @@ div {
 
 #start-instruction {
     padding:50px;
+}
+
+.stats-image-entry {
+    padding-top: 20px;
+    display:block;
+}
+
+#stats-screen {
+    overflow:auto;
+}
+
+#stats-header {
+    padding-top:30px;
+}
+
+.stats-table {
+    position:absolute;
+    top:193px;
+    left:50px;
+}
+
+.stats-entry-score {
+    padding-left:50px;
+}
+
+.stats-sub-entry-text {
+    padding: 11px 10px 10px 120px;
+    color:#FFFFFF;
+}
+
+.stats-entry-text {
+    padding: 11px 10px 9px 120px;
+    color:#FFFFFF;
+    font-style:bold;
+    font-size:150%;
+}
+.stats-spacing {
+    height: 23px;
 }

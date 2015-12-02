@@ -30,7 +30,7 @@ window.onload = function(e) {
     var h = window.innerHeight - 100;
     
     document.getElementById("main-screen").style.width = w + "px";
-    document.getElementById("main-screen").style.height  = h + "px";
+//    document.getElementById("main-screen").style.height  = h + "px";
     document.getElementById("main-screen").style.marginTop = "50px";
     document.getElementById("main-screen").style.marginLeft = "50px";
     
@@ -47,10 +47,6 @@ window.onload = function(e) {
     document.getElementById("continue-button").style.marginLeft = w + "px";
     
     beginSession();
-}
-
-function toggleShow(element) {
-    
 }
 
 var app = angular.module('myApp', []);
@@ -265,37 +261,39 @@ function sameSession() {
 }
 
 function beginSession() {
-    
-    $("#start-instruction").empty();
-    $("#start-instruction").html(INSTRUCTIONS[CurrentStep]);
-    $("#action-instruction").empty();
-    $("#action-instruction").html(STEPS[CurrentStep]);
-    
-    if (analyserContext != null) {
-        analyserContext.clearRect(0,0,canvasWidth, canvasHeight);
-    }
-    
-    analyserContext = null;
-    starting = 0;
-    buffer = 0;
-    $("#continue-screen").addClass("hidden");
-    $("#continue-screen").removeClass("show"); 
-    
-    $("#opening-screen").addClass("show");
-    $("#opening-screen").removeClass("hidden"); 
-    
-    $('.circle').removeClass('open');
+    if (CurrentStep < INSTRUCTIONS.length) {
+        $("#start-instruction").empty();
+        $("#start-instruction").html(INSTRUCTIONS[CurrentStep]);
+        $("#action-instruction").empty();
+        $("#action-instruction").html(STEPS[CurrentStep]);
 
-    $("#start-screen").addClass("show");
-    $("#start-screen").removeClass("hidden"); 
-}
+        if (analyserContext != null) {
+            analyserContext.clearRect(0,0,canvasWidth, canvasHeight);
+        }
 
-function toggleStartScreen() {
-    if ($(".start").hasClass("show")) {
-        $("#start").addClass("show");
-        $("#start").removeClass("hidden"); 
+        analyserContext = null;
+        starting = 0;
+        buffer = 0;
+
+        $("#continue-screen").addClass("hidden");
+        $("#continue-screen").removeClass("show"); 
+
+        $("#opening-screen").addClass("show");
+        $("#opening-screen").removeClass("hidden"); 
+
+        $('.circle').removeClass('open');
+
+        $("#start-screen").addClass("show");
+        $("#start-screen").removeClass("hidden"); 
+    } else {
+        $("#stats-screen").addClass("show");
+        $("#stats-screen").removeClass("hidden");
         
-        $("#start-instruction").addClass("show");
-        $("#start-instruction").removeClass("hidden"); 
+        
+        $("#continue-screen").addClass("hidden");
+        $("#continue-screen").removeClass("show");  
+        
+        $("#action-screen").addClass("hidden");
+        $("#action-screen").removeClass("show");  
     }
 }
