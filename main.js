@@ -5,7 +5,12 @@ var INSTRUCTIONS = ["Listen to the tones, this will be the pitch you will be sin
                     "Try and sing the word along with the voice and tone",
                     "Try and sing the word along with the tone"];
 var AUDIO_FILE = [];
-var CurrentStep = 0;
+var CurrentStep = 3;
+
+//Percentage result numbers
+var highFreqPerc = 0;
+var lowFreqPerc = 0;
+var averageFreqPerc = 0;
 
 //Drawing
 var starting = 0;
@@ -63,6 +68,15 @@ function startIt() {
             setTimeout(function() {
                 setTimeout(function() {
                     initAudio();
+                    if (CurrentStep == 3) {
+                        var xmlhttp;
+                        if (window.XMLHttpRequest) {
+                            xmlhttp = new XMLHttpRequest();
+                        }
+
+                        xmlhttp.open("GET","http://localhost:80");
+                        xmlhttp.send("text=stuff");
+                    }
                     $('#action-screen').removeClass('fadeIn');
                     $('#action-screen').removeClass('animated');
                     $('#start-screen').removeClass('fadeOut');
@@ -204,20 +218,6 @@ function initAudio() {
         });
 }
 
-function ieReadFile(filename) {
-     try {
-        var fso  = new ActiveXObject("Scripting.FileSystemObject");
-        var fh = fso.OpenTextFile(filename, 1);
-        var contents = fh.ReadAll();
-        fh.Close();
-        return contents;
-    }
-     catch (Exception)
-      {
-        alert(Exception);
-        return false;
-      }
-}
 
 function endSession() {
     $('#continue-screen').removeClass('hidden');
@@ -232,7 +232,6 @@ function nextSession() {
     //change audio file
     //tell matlab this will be the next session
     CurrentStep++;
-    
     beginSession();
 }
 
@@ -251,6 +250,11 @@ function beginSession() {
         if (analyserContext != null) {
             analyserContext.clearRect(0,0,canvasWidth, canvasHeight);
         }
+
+    if (analyserContext != null) {
+        analyserContext.clearRect(0,0,canvasWidth, canvasHeight);
+    }
+
 
         analyserContext = null;
         starting = 0;
@@ -282,4 +286,45 @@ function beginSession() {
 function setStatistic(id, value) {
     $("#" + id).empty();
     $("#" + id).html(value);
+}
+
+function readResults(filename) {
+     try {
+        var fso  = new ActiveXObject("Scripting.FileSystemObject");
+        var fh = fso.OpenTextFile(filename, 1);
+        var contents = fh.ReadAll().split('\n');
+
+        highFreqPerc = contents[0].trim();
+        lowFreqPerc = contents[1].trim();
+        averageFreqPerc = (highFreqPerc + lowFreqPerc) /2;
+
+        fh.Close();
+        return contents;
+    }
+     catch (Exception)
+      {
+        alert(Exception);
+        return false;
+      }
+}
+
+function RunExe(path) {
+    try {            
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.indexOf("msie") != -1) {
+            MyObject = new ActiveXObject("WScript.Shell")
+            MyObject.Run(path);
+        } else {
+            netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+
+            var exe = window.Components.classes['@mozilla.org/file/local;1'].createInstance(Components.interfaces.nsILocalFile);
+            exe.initWithPath(path);
+            var run = window.Components.classes['@mozilla.org/process/util;1'].createInstance(Components.interfaces.nsIProcess);
+            run.init(exe);
+            var parameters = ["/c start winword.exe"];
+            run.run(false, parameters, parameters.length);
+        }
+    } catch (ex) {
+        alert(ex.toString());
+    }
 }
