@@ -49,10 +49,8 @@ window.onload = function(e) {
     beginSession();
 }
 
-var app = angular.module('myApp', []);
-app.controller('myCtrl', function($scope) {
-    $scope.start = function($event) {
-        $('.circle').addClass('open');
+function startIt() {
+    $('.circle').addClass('open');
         $("#start-screen").addClass("fadeOut");
         $("#start-screen").addClass("animated");
         setTimeout(function() {
@@ -63,8 +61,6 @@ app.controller('myCtrl', function($scope) {
             $('#action-screen').addClass('fadeIn');
             $('#action-screen').addClass('animated');   
             setTimeout(function() {
-                $scope.hide($event);
-                toggleRecording($event.currentTarget);
                 setTimeout(function() {
                     initAudio();
                     $('#action-screen').removeClass('fadeIn');
@@ -75,14 +71,7 @@ app.controller('myCtrl', function($scope) {
                 }, 1000);
             }, 1000);
         }, 2000);
-        
-    };
-    $scope.hide = function($event) {
-        if ($event.currentTarget.parentElement) {
-            $event.currentTarget.parentElement.className = 'hidden';
-        }
-    }
-});
+}
 
 /** RECORDING **/
 
@@ -94,19 +83,6 @@ function doneEncoding( blob ) {
     console.log('setup DL');
     Recorder.setupDownload( blob, "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav" );
     recIndex++;
-}
-
-function toggleRecording( e ) {
-    if (e.classList.contains("recording")) {
-        audioRecorder.stop();
-        audioRecorder.getBuffers( gotBuffers );
-    } else {
-        // start recording
-        if (!audioRecorder)
-            return;
-        audioRecorder.clear();
-        audioRecorder.record();
-    }
 }
 
 function convertToMono( input ) {
