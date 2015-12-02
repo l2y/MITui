@@ -43,7 +43,6 @@ window.onload = function(e) {
 //    w = (window.innerWidth - document.getElementById("example-analyser").offsetWidth )/2;
 //    document.getElementById("example-analyser").style.marginLeft = w + "px";
 
-    console.log(document.getElementById("continue-button").offsetWidth);
     w = (window.innerWidth - 500 )/2 - 50;
     document.getElementById("continue-button").style.marginLeft = w + "px";
     
@@ -58,7 +57,13 @@ var app = angular.module('myApp', []);
 app.controller('myCtrl', function($scope) {
     $scope.start = function($event) {
         $('.circle').addClass('open');
+        $("#start-screen").addClass("fadeOut");
+        $("#start-screen").addClass("animated");
         setTimeout(function() {
+            $("#start-screen").addClass('hidden');
+            $("#start-screen").removeClass('show');
+            $('#opening-screen').addClass('hidden');
+            $('#opening-screen').removeClass('show');
             $('#action-screen').addClass('fadeIn');
             $('#action-screen').addClass('animated');   
             setTimeout(function() {
@@ -69,6 +74,7 @@ app.controller('myCtrl', function($scope) {
                 }, 1000);
             }, 1000);
         }, 2000);
+        
     };
     $scope.hide = function($event) {
         if ($event.currentTarget.parentElement) {
@@ -259,6 +265,7 @@ function sameSession() {
 }
 
 function beginSession() {
+    
     $("#start-instruction").empty();
     $("#start-instruction").html(INSTRUCTIONS[CurrentStep]);
     $("#action-instruction").empty();
@@ -273,6 +280,9 @@ function beginSession() {
     buffer = 0;
     $("#continue-screen").addClass("hidden");
     $("#continue-screen").removeClass("show"); 
+    
+    $("#opening-screen").addClass("show");
+    $("#opening-screen").removeClass("hidden"); 
     
     $('.circle').removeClass('open');
 

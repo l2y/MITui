@@ -114,3 +114,12 @@ div {
 #next-exercise {
     padding:50px;
 }
+
+#start-screen {
+    width: 100%;
+    text-align: center;
+}
+
+#start-instruction {
+    padding:50px;
+}

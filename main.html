@@ -22,14 +22,16 @@
     
 <!-- Main Screen -->
 <div id="main-screen" ng-app="myApp" ng-controller="myCtrl">
-    <div id="start-screen" class="show">
-        <div id="start-instruction" class="above-transparent middle">Instructions will go here!</div>
+    
+    <div id="start-screen">
+        <div id="start-instruction" class="above-transparent">Instructions will go here!</div>
         <img id="start" class="above-transparent" src="images/start.png" alt="START" ng-click="start($event)">
-        <div id="opening-screen" class="show" style="overflow:hidden">
+    </div>
+    
+    <div id="opening-screen" class="show" style="overflow:hidden">
             <div class="circle"></div>
             <div class="blue"></div>
         </div>
-    </div>
     
     <div id="action-screen">
 
