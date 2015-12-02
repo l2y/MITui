@@ -67,6 +67,11 @@ app.controller('myCtrl', function($scope) {
                 toggleRecording($event.currentTarget);
                 setTimeout(function() {
                     initAudio();
+                    $('#action-screen').removeClass('fadeIn');
+                    $('#action-screen').removeClass('animated');
+                    $('#start-screen').removeClass('fadeOut');
+                    $('#start-screen').removeClass('animated');
+                    $('.circle').removeClass('open');
                 }, 1000);
             }, 1000);
         }, 2000);
