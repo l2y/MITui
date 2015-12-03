@@ -259,7 +259,6 @@ function sameSession() {
 
 function beginSession() {
     if (CurrentStep < INSTRUCTIONS.length) {
-        console.log(CurrentStep);
         $("#start-instruction").empty();
         $("#start-instruction").html(INSTRUCTIONS[CurrentStep]);
         $("#action-instruction").empty();
@@ -284,9 +283,9 @@ function beginSession() {
         $("#start-screen").addClass("show");
         $("#start-screen").removeClass("hidden"); 
     } else {
+
         $("#stats-screen").addClass("show");
         $("#stats-screen").removeClass("hidden");
-        
         
         $("#continue-screen").addClass("hidden");
         $("#continue-screen").removeClass("show");  
@@ -299,24 +298,4 @@ function beginSession() {
 function setStatistic(id, value) {
     $("#" + id).empty();
     $("#" + id).html(value);
-}
-
-function readResults(filename) {
-     try {
-        var fso  = new ActiveXObject("Scripting.FileSystemObject");
-        var fh = fso.OpenTextFile(filename, 1);
-        var contents = fh.ReadAll().split('\n');
-
-        highFreqPerc = contents[0].trim();
-        lowFreqPerc = contents[1].trim();
-        averageFreqPerc = (highFreqPerc + lowFreqPerc) /2;
-
-        fh.Close();
-        return contents;
-    }
-     catch (Exception)
-      {
-        alert(Exception);
-        return false;
-      }
 }

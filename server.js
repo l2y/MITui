@@ -64,6 +64,12 @@ function handleRequest(request, response){
 function handleResult(request, response){
   	response.setHeader('Access-Control-Allow-Origin','*'); 
 	var fs = require('fs');
+    do {                                           
+    	var file = "C:\\Users\\Cain\\Desktop\\classifier\\pitch_detection_percentage.txt";
+    	var exists = fs.existsSync(file);
+    	console.log(exists);     
+  } while (!exists);
+
 	filename = 'C:\\Users\\Cain\\Desktop\\classifier\\pitch_detection_percentage.txt';
 	fs.readFile(filename, 'utf8', function(err, data) {
 	  	if (err) throw err;
