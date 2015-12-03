@@ -291,3 +291,29 @@ function beginSession() {
         $("#action-screen").removeClass("show");  
     }
 }
+
+function setStatistic(id, value) {
+    $("#" + id).empty();
+    $("#" + id).html(value);
+}
+
+function readResults(filename) {
+     try {
+        var fso  = new ActiveXObject("Scripting.FileSystemObject");
+        var fh = fso.OpenTextFile(filename, 1);
+        var contents = fh.ReadAll().split('\n');
+
+        highFreqPerc = contents[0].trim();
+        lowFreqPerc = contents[1].trim();
+        averageFreqPerc = (highFreqPerc + lowFreqPerc) /2;
+
+        fh.Close();
+        return contents;
+    }
+     catch (Exception)
+      {
+        alert(Exception);
+        return false;
+      }
+}
+}
