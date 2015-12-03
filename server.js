@@ -1,7 +1,6 @@
 var connect = require('connect');
 var serveStatic = require('serve-static');
 connect().use(serveStatic(__dirname)).listen(8080);
-console.log('Listening');
 
 var exec = require('child_process').exec,
     path = require('path'),
@@ -51,21 +50,45 @@ exports.exec = function (scriptFile, workingDirectory, environment, callback) {
 var http = require('http');
 
 //Lets define a port we want to listen to
-const PORT=80; 
+const PORT80=80;
+const PORT90=90; 
 
 //We need a function which handles requests and send response
 function handleRequest(request, response){
+  	response.setHeader('Access-Control-Allow-Origin','*'); 
 	exec('C:\\Users\\Cain\\Desktop\\classifier\\pitch_detection_matlab.bat');
-    response.end('It Works!! Path Hit: ' + request.url);
+	response.end();
+	
+}
+
+function handleResult(request, response){
+  	response.setHeader('Access-Control-Allow-Origin','*'); 
+	var fs = require('fs');
+	filename = 'C:\\Users\\Cain\\Desktop\\classifier\\pitch_detection_percentage.txt';
+	fs.readFile(filename, 'utf8', function(err, data) {
+	  	if (err) throw err;
+	  	console.log(data);
+	  	response.write(data);
+	  	response.end();
+	});
 }
 
 //Create a server
-var server = http.createServer(handleRequest);
+var server80 = http.createServer(handleRequest);
+var server90 = http.createServer(handleResult);
 
 //Lets start our server
-server.listen(PORT, function(){
+server80.listen(PORT80, function(){
     //Callback triggered when server is successfully listening. Hurray!
-    console.log("Server listening on: http://localhost:%s", PORT);
+    console.log("Server listening on: http://localhost:%s", PORT80);
 });
+
+server90.listen(PORT90, function(){
+    //Callback triggered when server is successfully listening. Hurray!
+    console.log("Server listening on: http://localhost:%s", PORT90);
+});
+
+
+
 
 
