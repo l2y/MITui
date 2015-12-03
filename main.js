@@ -1,11 +1,11 @@
 //MIT
-var STEPS = ["Pitch Tuning", "Humming", "Singing", "Independant Singing"];
+var STEPS = ["Pitch Tuning", "Humming", "Singing", "Independent Singing"];
 var INSTRUCTIONS = ["Listen to the tones, this will be the pitch you will be singing at",
                     "Try and hum along with the tone",
                     "Try and sing the word along with the voice and tone",
                     "Try and sing the word along with the tone"];
 var AUDIO_FILE = [];
-var CurrentStep = 3;
+var CurrentStep = 0;
 
 //Percentage result numbers
 var highFreqPerc = 0;
@@ -158,9 +158,12 @@ function updateAnalysers(time) {
 
 function reqListener () {
     var resp = this.responseText.split("\r\n");
-    highFreqPerc = resp[0];
-    lowFreqPerc = resp[1];
-    averageFreqPerc = (parseFloat(highFreqPerc) + parseFloat(lowFreqPerc)) / 2;
+    highFreqPerc = parseFloat(resp[0]);
+    lowFreqPerc = parseFloat(resp[1]);
+    averageFreqPerc = ((parseFloat(highFreqPerc) + parseFloat(lowFreqPerc)) / 2);
+    setStatistic('stats-high-pitch',highFreqPerc.toFixed(0) + '%');
+    setStatistic('stats-low-pitch',lowFreqPerc.toFixed(0) + '%');
+    setStatistic('stats-pitch-accuracy',averageFreqPerc.toFixed(0) + '%');
     console.log(highFreqPerc);
     console.log(lowFreqPerc);
     console.log(averageFreqPerc);
@@ -174,36 +177,37 @@ function gotStream(stream) {
         xmlhttp.open("GET","http://localhost:80");
         xmlhttp.send(null);
     }
-
+    setTimeout(function(){
     // Create an AudioNode from the stream.
-    realAudioInput = audioContext.createMediaStreamSource(stream);
-    audioInput = realAudioInput;
-    audioInput.connect(inputPoint);
+        realAudioInput = audioContext.createMediaStreamSource(stream);
+        audioInput = realAudioInput;
+        audioInput.connect(inputPoint);
 
-    analyserNode = audioContext.createAnalyser();
-    analyserNode.fftSize = 2048;
-    inputPoint.connect( analyserNode );
+        analyserNode = audioContext.createAnalyser();
+        analyserNode.fftSize = 2048;
+        inputPoint.connect( analyserNode );
 
-    audioRecorder = new Recorder( inputPoint );
+        audioRecorder = new Recorder( inputPoint );
 
-    zeroGain = audioContext.createGain();
-    zeroGain.gain.value = 0.0;
-    inputPoint.connect( zeroGain );
-    zeroGain.connect( audioContext.destination );
-    
-    audio.play();
-    
-    updateAnalysers();
+        zeroGain = audioContext.createGain();
+        zeroGain.gain.value = 0.0;
+        inputPoint.connect( zeroGain );
+        zeroGain.connect( audioContext.destination );
+        
+        audio.play();
+        
+        updateAnalysers();
 
-    setTimeout(function() {
-        if (CurrentStep == 3) {
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.addEventListener("load", reqListener);
-            xmlhttp.open("GET","http://localhost:90"); 
-            xmlhttp.send(null);
-        }
-        endSession();
-    }, 6000);
+        setTimeout(function() {
+            if (CurrentStep == 3) {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.addEventListener("load", reqListener);
+                xmlhttp.open("GET","http://localhost:90"); 
+                xmlhttp.send(null);
+            }
+            endSession();
+        }, 6000);
+    }, 3000);
 }
 
 function initAudio() {
@@ -315,5 +319,4 @@ function readResults(filename) {
         alert(Exception);
         return false;
       }
-}
 }
