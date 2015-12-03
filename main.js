@@ -27,7 +27,7 @@ var audioRecorder = null;
 var rafID = null;
 var analyserContext = null;
 var recIndex = 0;
-var audio = new Audio('sound/Schwifty.mp3');
+var audio = new Audio('sound/water_110_195_words.wav');
 audio.loop = true;
 
 window.onload = function(e) {
