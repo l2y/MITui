@@ -28,12 +28,16 @@ var rafID = null;
 var analyserContext = null;
 var recIndex = 0;
 var audio = new Audio('sound/water_110_195_words.wav');
+var audio2 = new Audio('sound/water_110_195_hum.wav');
+var audioArray = [ audio, audio2];
+var stepToAudio = [ 1, 1, 0, 1] 
 audio.loop = true;
+audio2.loop = true;
 
 window.onload = function(e) {
     var w = window.innerWidth - 100;
     var h = window.innerHeight - 100;
-    
+
     document.getElementById("main-screen").style.width = w + "px";
 //    document.getElementById("main-screen").style.height  = h + "px";
     document.getElementById("main-screen").style.marginTop = "50px";
@@ -85,9 +89,12 @@ function gotBuffers( buffers ) {
 }
 
 function doneEncoding( blob ) {
-    console.log('setup DL');
-    Recorder.setupDownload( blob, "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav" );
-    recIndex++;
+ 	var fd = new FormData();
+	fd.append("upload", blob, "sample.wav");
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.overrideMimeType("multipart/form-data");
+  	xmlhttp.open("POST","http://localhost:80/upload");
+	xmlhttp.send(fd);
 }
 
 function convertToMono( input ) {
@@ -169,9 +176,15 @@ function reqListener () {
     console.log(averageFreqPerc);
 }
 
+function postPulse(){
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST","http://localhost:80");
+	xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+	xmlhttp.send(null);
+}
+
 function gotStream(stream) {
     inputPoint = audioContext.createGain();
-
     if (CurrentStep == 3) {
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("GET","http://localhost:80");
@@ -193,11 +206,12 @@ function gotStream(stream) {
         zeroGain.gain.value = 0.0;
         inputPoint.connect( zeroGain );
         zeroGain.connect( audioContext.destination );
-        
-        audio.play();
-        
+       	audioRecorder.record(); 
+       	postPulse();
+		audioArray[stepToAudio[CurrentStep]].play()
+		audio.play();
         updateAnalysers();
-
+				
         setTimeout(function() {
             if (CurrentStep == 3) {
                 var xmlhttp = new XMLHttpRequest();
@@ -207,18 +221,21 @@ function gotStream(stream) {
             }
             endSession();
         }, 6000);
+				
     }, 3000);
 }
 
 function initAudio() {
-        if (!navigator.getUserMedia)
-            navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        
+				if (!navigator.getUserMedia){
+			navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+		}
         if (!navigator.cancelAnimationFrame)
             navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
         if (!navigator.requestAnimationFrame)
             navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
 
-    navigator.getUserMedia(
+	navigator.getUserMedia(
         {
             "audio": {
                 "mandatory": {
@@ -231,7 +248,6 @@ function initAudio() {
             },
         }, gotStream, function(e) {
             alert('Error getting audio');
-            console.log(e);
         });
 }
 
@@ -239,9 +255,11 @@ function initAudio() {
 function endSession() {
     $('#continue-screen').removeClass('hidden');
     $('#continue-screen').addClass('show');
+		audioRecorder.stop();	
     cancelAnalyserUpdates();
-    audio.pause();
-    audio.currentTime = 0;
+	audioArray[stepToAudio[CurrentStep]].pause()
+	audioArray[stepToAudio[CurrentStep]].currentTime=0;
+	audioRecorder.getBuffers( gotBuffers );
 }
 
 function nextSession() {
