@@ -29,7 +29,11 @@ var analyserContext = null;
 var recIndex = 0;
 var audio = new Audio('sound/water_110_195_words.wav');
 var word = "";
+var audio2 = new Audio('sound/water_110_195_hum.wav');
+var audioArray = [ audio, audio2];
+var stepToAudio = [ 1, 1, 0, 1] 
 audio.loop = true;
+audio2.loop = true;
 
 window.onload = function(e) {
     var w = window.innerWidth - 100;
@@ -78,9 +82,12 @@ function gotBuffers( buffers ) {
 }
 
 function doneEncoding( blob ) {
-    console.log('setup DL');
-    Recorder.setupDownload( blob, "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav" );
-    recIndex++;
+ 	var fd = new FormData();
+	fd.append("upload", blob, "sample.wav");
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.overrideMimeType("multipart/form-data");
+  	xmlhttp.open("POST","http://localhost:80/upload");
+	xmlhttp.send(fd);
 }
 
 function convertToMono( input ) {
@@ -162,9 +169,15 @@ function reqListener () {
     console.log(averageFreqPerc);
 }
 
+function postPulse(){
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST","http://localhost:80");
+	xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+	xmlhttp.send(null);
+}
+
 function gotStream(stream) {
     inputPoint = audioContext.createGain();
-
     if (CurrentStep == 3) {
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("GET","http://localhost:80");
@@ -186,12 +199,17 @@ function gotStream(stream) {
         zeroGain.gain.value = 0.0;
         inputPoint.connect( zeroGain );
         zeroGain.connect( audioContext.destination );
-        
-        audio = setAudio();
-        audio.play();
-        
-        updateAnalysers();
 
+        //CHANGE AUDIO HERE
+        
+        _audioArray = setAudio();
+        
+       	audioRecorder.record(); 
+       	postPulse();
+		_audioArray[stepToAudio[CurrentStep]].play()
+//		audio.play();
+        updateAnalysers();
+				
         setTimeout(function() {
             if (CurrentStep == 3) {
                 var xmlhttp = new XMLHttpRequest();
@@ -201,95 +219,56 @@ function gotStream(stream) {
             }
             endSession();
         }, 6000);
+				
     }, 3000);
 }
 
 function setAudio(){
     var w = $("#word").text();
+    var _audioArray = audioArray;
     if (w == 'Water') {
-        if (CurrentStep == 0) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 1) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 2) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 3) {
-            audio.src = 'sound/water_110_195_words.wav';
-        }
-        console.log(audio.src);
+        var audio1 = new Audio('sound/water_110_195_words.wav');
+        var audio2 = new Audio('sound/water_110_195_hum.wav');
+        _audioArray = [ audio, audio2];
     } else if (w == 'Hello') {
-        if (CurrentStep == 0) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 1) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 2) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 3) {
-            audio.src = 'sound/water_110_195_words.wav';
-        }
+        var audio1 = new Audio('sound/water_110_195_words.wav');
+        var audio2 = new Audio('sound/water_110_195_hum.wav');
+        _audioArray = [ audio, audio2];
     } else if (w == 'How Are You'){
-        if (CurrentStep == 0) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 1) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 2) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 3) {
-            audio.src = 'sound/water_110_195_words.wav';
-        }
+        var audio1 = new Audio('sound/water_110_195_words.wav');
+        var audio2 = new Audio('sound/water_110_195_hum.wav');
+        _audioArray = [ audio, audio2];
     } else if (w == 'I Am Good'){
-        if (CurrentStep == 0) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 1) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 2) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 3) {
-            audio.src = 'sound/water_110_195_words.wav';
-        }
+        var audio1 = new Audio('sound/water_110_195_words.wav');
+        var audio2 = new Audio('sound/water_110_195_hum.wav');
+        _audioArray = [ audio, audio2];
     } else if (w == 'I Love You'){
-        if (CurrentStep == 0) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 1) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 2) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 3) {
-            audio.src = 'sound/water_110_195_words.wav';
-        }
+        var audio1 = new Audio('sound/water_110_195_words.wav');
+        var audio2 = new Audio('sound/water_110_195_hum.wav');
+        _audioArray = [ audio, audio2];
     } else if (w == 'Ice Cream'){
-        if (CurrentStep == 0) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 1) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 2) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 3) {
-            audio.src = 'sound/water_110_195_words.wav';
-        }
+        var audio1 = new Audio('sound/water_110_195_words.wav');
+        var audio2 = new Audio('sound/water_110_195_hum.wav');
+        _audioArray = [ audio, audio2];
     } else if (w == 'Thank You'){
-        if (CurrentStep == 0) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 1) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 2) {
-            audio.src = 'sound/water_110_195_words.wav';
-        } else if (CurrentStep == 3) {
-            audio.src = 'sound/water_110_195_words.wav';
-        }
+        var audio1 = new Audio('sound/water_110_195_words.wav');
+        var audio2 = new Audio('sound/water_110_195_hum.wav');
+        _audioArray = [ audio, audio2];
     }
-    return audio;
+    return _audioArray;
 }
 
 function initAudio() {
-        if (!navigator.getUserMedia)
-            navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        
+				if (!navigator.getUserMedia){
+			navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+		}
         if (!navigator.cancelAnimationFrame)
             navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
         if (!navigator.requestAnimationFrame)
             navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
 
-    navigator.getUserMedia(
+	navigator.getUserMedia(
         {
             "audio": {
                 "mandatory": {
@@ -302,7 +281,6 @@ function initAudio() {
             },
         }, gotStream, function(e) {
             alert('Error getting audio');
-            console.log(e);
         });
 }
 
@@ -310,9 +288,11 @@ function initAudio() {
 function endSession() {
     $('#continue-screen').removeClass('hidden');
     $('#continue-screen').addClass('show');
+		audioRecorder.stop();	
     cancelAnalyserUpdates();
-    audio.pause();
-    audio.currentTime = 0;
+	audioArray[stepToAudio[CurrentStep]].pause()
+	audioArray[stepToAudio[CurrentStep]].currentTime=0;
+	audioRecorder.getBuffers( gotBuffers );
 }
 
 function nextSession() {
@@ -333,7 +313,6 @@ function sameSession() {
 function beginSession() {
     //next screen
     if (CurrentStep < INSTRUCTIONS.length) {
-        console.log(CurrentStep);
         $("#start-instruction").empty();
         $("#start-instruction").html(INSTRUCTIONS[CurrentStep]);
         $("#action-instruction").empty();
@@ -355,17 +334,15 @@ function beginSession() {
         $("#opening-screen").addClass("show");
         $("#opening-screen").removeClass("hidden"); 
 
-//        $("#start-screen").addClass("show");
-//        $("#start-screen").removeClass("hidden");
         if (CurrentStep != 0) {
             $("#start-next-screen").addClass("show");
             $("#start-next-screen").removeClass("hidden");
         }
     //stats screen
     } else {
+
         $("#stats-screen").addClass("show");
         $("#stats-screen").removeClass("hidden");
-        
         
         $("#continue-screen").addClass("hidden");
         $("#continue-screen").removeClass("show");  
@@ -378,24 +355,4 @@ function beginSession() {
 function setStatistic(id, value) {
     $("#" + id).empty();
     $("#" + id).html(value);
-}
-
-function readResults(filename) {
-     try {
-        var fso  = new ActiveXObject("Scripting.FileSystemObject");
-        var fh = fso.OpenTextFile(filename, 1);
-        var contents = fh.ReadAll().split('\n');
-
-        highFreqPerc = contents[0].trim();
-        lowFreqPerc = contents[1].trim();
-        averageFreqPerc = (highFreqPerc + lowFreqPerc) /2;
-
-        fh.Close();
-        return contents;
-    }
-     catch (Exception)
-      {
-        alert(Exception);
-        return false;
-      }
 }
