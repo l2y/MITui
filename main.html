@@ -25,20 +25,47 @@
     
     <div id="start-screen" class="show">
         <div id="start-instruction" class="above-transparent">Instructions will go here!</div>
-        <img id="start" class="above-transparent" src="images/start.png" alt="START" onclick="startIt()">
+<!--        <img id="start" class="above-transparent" src="images/start.png" alt="START" onclick="startIt()">-->
+        
+<!--        water/hello/how are you/i am good/i love you/ice cream/thank you-->
+<!--
+        <img id="start" class="above-transparent" src="images/button.png" alt="START" onclick="startIt()">
+        <img id="start" class="above-transparent" src="images/button.png" alt="START" onclick="startIt()">
+        <img id="start" class="above-transparent" src="images/button.png" alt="START" onclick="startIt()">
+        <img id="start" class="above-transparent" src="images/button.png" alt="START" onclick="startIt()">
+        <img id="start" class="above-transparent" src="images/button.png" alt="START" onclick="startIt()">
+        <img id="start" class="above-transparent" src="images/button.png" alt="START" onclick="startIt()">
+        <img id="start" class="above-transparent" src="images/button.png" alt="START" onclick="startIt()">
+-->
+        <div class="all-buttons">
+            <div class="button above-transparent" alt="START" onclick="startIt('Water')">Water</div>
+            <div class="button above-transparent" alt="START" onclick="startIt('Hello')">Hello</div>
+            <div class="button above-transparent" alt="START" onclick="startIt('How Are You')">How Are You</div>
+            <div class="button above-transparent" alt="START" onclick="startIt('I Am Good')">I Am Good</div>
+            <div class="button above-transparent" alt="START" onclick="startIt('I Love You')">I Love You</div>
+            <div class="button above-transparent" alt="START" onclick="startIt('Ice Cream')">Ice Cream</div>
+            <div class="button above-transparent" alt="START" onclick="startIt('Thank You')">Thank You</div>
+        </div>
+    </div>
+    
+    <div id="start-next-screen" class="hidden">
+        <div id="action-next-instruction" class="above-transparent">Instructions will go here!</div>
+        <div class="all-buttons">
+            <div class="button above-transparent" alt="START" onclick="startIt()">Continue</div>
+        </div>
     </div>
     
     <div id="opening-screen" class="show" style="overflow:hidden">
-            <div class="circle"></div>
             <div class="blue"></div>
         </div>
     
     <div id="action-screen">
 
         <div class="word-area">
-            <img id="word" class="header" src="images/water.jpg" alt="WATER">
+<!--            <img id="word" class="header" src="images/water.jpg" alt="WATER">-->
+            <div id="word" class="header-word" alt="WORD">Fill in Phrase</div>
             <div id="action-instruction" class="header">INSTRUCTION</div>
-            <img class="image" class="header" src="images/water_image.jpg" alt="WATER IMAGE">
+<!--            <img class="image" class="header" src="images/water_image.jpg" alt="WATER IMAGE">-->
             <!--    a blinking light to represent the physical feedback-->
         </div>
         
@@ -57,8 +84,14 @@
     <!-- Continue Screen -->
     <div id="continue-screen" class="hidden">
         <div id="continue-button">
+<!--
             <img class="above-transparent" id="retry" src="images/retry.png" alt="RETRY" onclick="sameSession()">
             <img class="above-transparent" id="next-exercise" src="images/next.png" alt="NEXT" onclick="nextSession()">
+-->
+            <div>
+            <div id="left" class="button-red above-transparent" alt="RETRY" onclick="sameSession()">Retry</div>
+            <div id="right" class="button-next above-transparent" alt="NEXT" onclick="nextSession()">Next</div>
+                </div>
         </div>
 
         <div class="transparent"></div>

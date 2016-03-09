@@ -27,26 +27,16 @@ var audioRecorder = null;
 var rafID = null;
 var analyserContext = null;
 var recIndex = 0;
-var audio = new Audio('sound/Schwifty.mp3');
+var audio = new Audio('sound/water_110_195_words.wav');
+var word = "";
 audio.loop = true;
 
 window.onload = function(e) {
     var w = window.innerWidth - 100;
     var h = window.innerHeight - 100;
     
-    document.getElementById("main-screen").style.width = w + "px";
-//    document.getElementById("main-screen").style.height  = h + "px";
-    document.getElementById("main-screen").style.marginTop = "50px";
-    document.getElementById("main-screen").style.marginLeft = "50px";
-    
-//    w = (window.innerWidth - 120)/2;
-//    document.getElementById("end").style.marginLeft = w + "px";
-    
     w = (window.innerWidth - document.getElementById("analyser").offsetWidth )/2 - 50;
     document.getElementById("analyser").style.marginLeft = w + "px";
-    
-//    w = (window.innerWidth - document.getElementById("example-analyser").offsetWidth )/2;
-//    document.getElementById("example-analyser").style.marginLeft = w + "px";
 
     w = (window.innerWidth - 500 )/2 - 50;
     document.getElementById("continue-button").style.marginLeft = w + "px";
@@ -54,13 +44,18 @@ window.onload = function(e) {
     beginSession();
 }
 
-function startIt() {
+function startIt(w) {
+    word = w;
+    $("#word").text(w);
+    
+    
     $('.circle').addClass('open');
         $("#start-screen").addClass("fadeOut");
         $("#start-screen").addClass("animated");
-        setTimeout(function() {
             $("#start-screen").addClass('hidden');
             $("#start-screen").removeClass('show');
+            $("#start-next-screen").addClass('hidden');
+            $("#start-next-screen").removeClass('show');
             $('#opening-screen').addClass('hidden');
             $('#opening-screen').removeClass('show');
             $('#action-screen').addClass('fadeIn');
@@ -72,10 +67,8 @@ function startIt() {
                     $('#action-screen').removeClass('animated');
                     $('#start-screen').removeClass('fadeOut');
                     $('#start-screen').removeClass('animated');
-                    $('.circle').removeClass('open');
                 }, 1000);
             }, 1000);
-        }, 2000);
 }
 
 /** RECORDING **/
@@ -194,6 +187,7 @@ function gotStream(stream) {
         inputPoint.connect( zeroGain );
         zeroGain.connect( audioContext.destination );
         
+        audio = setAudio();
         audio.play();
         
         updateAnalysers();
@@ -208,6 +202,83 @@ function gotStream(stream) {
             endSession();
         }, 6000);
     }, 3000);
+}
+
+function setAudio(){
+    var w = $("#word").text();
+    if (w == 'Water') {
+        if (CurrentStep == 0) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 1) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 2) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 3) {
+            audio.src = 'sound/water_110_195_words.wav';
+        }
+        console.log(audio.src);
+    } else if (w == 'Hello') {
+        if (CurrentStep == 0) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 1) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 2) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 3) {
+            audio.src = 'sound/water_110_195_words.wav';
+        }
+    } else if (w == 'How Are You'){
+        if (CurrentStep == 0) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 1) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 2) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 3) {
+            audio.src = 'sound/water_110_195_words.wav';
+        }
+    } else if (w == 'I Am Good'){
+        if (CurrentStep == 0) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 1) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 2) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 3) {
+            audio.src = 'sound/water_110_195_words.wav';
+        }
+    } else if (w == 'I Love You'){
+        if (CurrentStep == 0) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 1) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 2) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 3) {
+            audio.src = 'sound/water_110_195_words.wav';
+        }
+    } else if (w == 'Ice Cream'){
+        if (CurrentStep == 0) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 1) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 2) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 3) {
+            audio.src = 'sound/water_110_195_words.wav';
+        }
+    } else if (w == 'Thank You'){
+        if (CurrentStep == 0) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 1) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 2) {
+            audio.src = 'sound/water_110_195_words.wav';
+        } else if (CurrentStep == 3) {
+            audio.src = 'sound/water_110_195_words.wav';
+        }
+    }
+    return audio;
 }
 
 function initAudio() {
@@ -254,16 +325,21 @@ function nextSession() {
 
 function sameSession() {
     //tell matlab this will be a repeated session
+    $("#start-next-screen").addClass("show");
+    $("#start-next-screen").removeClass("hidden");
     beginSession();
 }
 
 function beginSession() {
+    //next screen
     if (CurrentStep < INSTRUCTIONS.length) {
         console.log(CurrentStep);
         $("#start-instruction").empty();
         $("#start-instruction").html(INSTRUCTIONS[CurrentStep]);
         $("#action-instruction").empty();
         $("#action-instruction").html(STEPS[CurrentStep]);
+        $("#action-next-instruction").empty();
+        $("#action-next-instruction").html(INSTRUCTIONS[CurrentStep]);
 
         if (analyserContext != null) {
             analyserContext.clearRect(0,0,canvasWidth, canvasHeight);
@@ -279,10 +355,13 @@ function beginSession() {
         $("#opening-screen").addClass("show");
         $("#opening-screen").removeClass("hidden"); 
 
-        $('.circle').removeClass('open');
-
-        $("#start-screen").addClass("show");
-        $("#start-screen").removeClass("hidden"); 
+//        $("#start-screen").addClass("show");
+//        $("#start-screen").removeClass("hidden");
+        if (CurrentStep != 0) {
+            $("#start-next-screen").addClass("show");
+            $("#start-next-screen").removeClass("hidden");
+        }
+    //stats screen
     } else {
         $("#stats-screen").addClass("show");
         $("#stats-screen").removeClass("hidden");

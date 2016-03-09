@@ -90,9 +90,22 @@ body {
 #action-instruction {
     padding-left:200px;
 }
+#action-next-instruction {
+    text-align: center;
+}
 
 .header {
     float:left;
+}
+
+.header-word {
+    background-image: url("images/water.jpg");
+    float: left;
+    height: 93px;
+    width: 418px;
+    padding-top: 15px;
+    padding-left: 10px;
+    font-size: 250%;
 }
 
 div {
@@ -119,7 +132,7 @@ div {
 }
 
 #start-instruction {
-    padding:50px;
+    margin-bottom:50px;
 }
 
 .stats-image-entry {
@@ -137,8 +150,8 @@ div {
 
 .stats-table {
     position:absolute;
-    top:193px;
-    left:50px;
+    top: 143px;
+    left: 0px;
 }
 
 .stats-entry-score {
@@ -159,3 +172,43 @@ div {
 .stats-spacing {
     height: 23px;
 }
+
+.button {
+   width:200px; 
+   height:50px; 
+    vertical-align:middle;
+    padding:7px;
+    margin-bottom:10px;
+   background-image: url(images/button.png);   
+    margin-right: auto;
+margin-left: auto;
+}
+
+.button-red {
+       width:200px; 
+   height:50px; 
+    vertical-align:middle;
+    padding:7px;
+    margin-bottom:10px;
+   background-image: url(images/button-red.png);   
+    margin-right: auto;
+margin-left: auto;
+    display: inline-block;
+}
+
+.button-next {
+       width:200px; 
+   height:50px; 
+    vertical-align:middle;
+    padding:7px;
+    margin-bottom:10px;
+   background-image: url(images/button-next.png);   
+    margin-right: auto;
+margin-left: auto;
+    display: inline-block;
+}
+
+.all-buttons {
+    align-content: center;
+}
+
