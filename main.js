@@ -1,9 +1,10 @@
 //MIT
-var STEPS = ["Pitch Tuning", "Humming", "Singing", "Independent Singing"];
-var INSTRUCTIONS = ["Listen to the tones, this will be the pitch you will be singing at",
-                    "Try and hum along with the tone",
-                    "Try and sing the word along with the voice and tone",
-                    "Try and sing the word along with the tone"];
+var STEPS = ["Listen", "Sing The Phrase", "Sing the Phrase Again", "Listen", "Independent Singing"];
+var INSTRUCTIONS = ["Listen to the tones, this will be the pitch you will be singing at in the next step",
+                    "Try and sing along with the phrase",
+                    "Try and sing along with the phrase again, the sound will slowly fade out near the end. Keep singing until indicated",
+                    "Once again, listen to the phrase",
+                    "Sing the phrase on your own."];
 var AUDIO_FILE = [];
 var CurrentStep = 0;
 
@@ -27,13 +28,9 @@ var audioRecorder = null;
 var rafID = null;
 var analyserContext = null;
 var recIndex = 0;
-var audio = new Audio('sound/water_110_195_words.wav');
 var word = "";
-var audio2 = new Audio('sound/water_110_195_hum.wav');
-var audioArray = [ audio, audio2];
-var stepToAudio = [ 1, 1, 0, 1] 
-audio.loop = true;
-audio2.loop = true;
+var stepToAudio = [ 0, 0, 0, 0, 1] 
+var _audioArray;
 
 window.onload = function(e) {
     var w = window.innerWidth - 100;
@@ -62,6 +59,10 @@ function startIt(w) {
             $("#start-next-screen").removeClass('show');
             $('#opening-screen').addClass('hidden');
             $('#opening-screen').removeClass('show');
+    
+            $('#action-screen').addClass('show');
+            $('#action-screen').removeClass('hidden');
+    
             $('#action-screen').addClass('fadeIn');
             $('#action-screen').addClass('animated');   
             setTimeout(function() {
@@ -206,8 +207,7 @@ function gotStream(stream) {
         
        	audioRecorder.record(); 
        	postPulse();
-		_audioArray[stepToAudio[CurrentStep]].play()
-//		audio.play();
+		_audioArray[stepToAudio[CurrentStep]].play();
         updateAnalysers();
 				
         setTimeout(function() {
@@ -224,51 +224,51 @@ function gotStream(stream) {
 }
 
 function setAudio(){
+    //hold all audio in global then pointers to current
     var w = $("#word").text();
-    var _audioArray = audioArray;
     if (w == 'Water') {
         var audio1 = new Audio('sound/water_110_195_words.wav');
         var audio2 = new Audio('sound/water_110_195_hum.wav');
-        _audioArray = [ audio, audio2];
+        _audioArray = [ audio1, audio2];
     } else if (w == 'Hello') {
-        var audio1 = new Audio('sound/water_110_195_words.wav');
-        var audio2 = new Audio('sound/water_110_195_hum.wav');
-        _audioArray = [ audio, audio2];
+        var audio1 = new Audio('sound/Hello.wav');
+        var audio2 = new Audio('sound/Hello_humming.wav');
+        console.log(audio1);
+        _audioArray = [ audio1, audio2];
     } else if (w == 'How Are You'){
-        var audio1 = new Audio('sound/water_110_195_words.wav');
-        var audio2 = new Audio('sound/water_110_195_hum.wav');
-        _audioArray = [ audio, audio2];
+        var audio1 = new Audio('sound/How Are You.wav');
+        var audio2 = new Audio('sound/How Are You_humming.wav');
+        _audioArray = [ audio1, audio2];
     } else if (w == 'I Am Good'){
-        var audio1 = new Audio('sound/water_110_195_words.wav');
-        var audio2 = new Audio('sound/water_110_195_hum.wav');
+        var audio1 = new Audio('sound/I am Good.wav');
+        var audio2 = new Audio('sound/I am Good_humming.wav');
         _audioArray = [ audio, audio2];
     } else if (w == 'I Love You'){
-        var audio1 = new Audio('sound/water_110_195_words.wav');
-        var audio2 = new Audio('sound/water_110_195_hum.wav');
-        _audioArray = [ audio, audio2];
+        var audio1 = new Audio('sound/I Love You.wav');
+        var audio2 = new Audio('sound/I Love You_humming.wav');
+        _audioArray = [ audio1, audio2];
     } else if (w == 'Ice Cream'){
-        var audio1 = new Audio('sound/water_110_195_words.wav');
-        var audio2 = new Audio('sound/water_110_195_hum.wav');
-        _audioArray = [ audio, audio2];
+        var audio1 = new Audio('sound/Ice Cream.wav');
+        var audio2 = new Audio('sound/Ice Cream_humming.wav');
+        _audioArray = [ audio1, audio2];
     } else if (w == 'Thank You'){
-        var audio1 = new Audio('sound/water_110_195_words.wav');
-        var audio2 = new Audio('sound/water_110_195_hum.wav');
-        _audioArray = [ audio, audio2];
+        var audio1 = new Audio('sound/Thank You.wav');
+        var audio2 = new Audio('sound/Thank You_humming.wav');
+        _audioArray = [audio1, audio2];
     }
     return _audioArray;
 }
 
 function initAudio() {
-        
-				if (!navigator.getUserMedia){
+        if (!navigator.getUserMedia){
 			navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 		}
         if (!navigator.cancelAnimationFrame)
             navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
         if (!navigator.requestAnimationFrame)
             navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
-
-	navigator.getUserMedia(
+	
+    navigator.getUserMedia(
         {
             "audio": {
                 "mandatory": {
@@ -290,8 +290,8 @@ function endSession() {
     $('#continue-screen').addClass('show');
 		audioRecorder.stop();	
     cancelAnalyserUpdates();
-	audioArray[stepToAudio[CurrentStep]].pause()
-	audioArray[stepToAudio[CurrentStep]].currentTime=0;
+	_audioArray[stepToAudio[CurrentStep]].pause()
+	_audioArray[stepToAudio[CurrentStep]].currentTime=0;
 	audioRecorder.getBuffers( gotBuffers );
 }
 

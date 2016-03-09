@@ -92,6 +92,8 @@ body {
 }
 #action-next-instruction {
     text-align: center;
+    font-size:200%;
+    margin-top:50px;
 }
 
 .header {
@@ -133,6 +135,19 @@ div {
 
 #start-instruction {
     margin-bottom:50px;
+    font-size:200%;
+    margin-top:50px;
+}
+
+.stroke {
+    -webkit-text-stroke: 1px black;
+    color: white;
+    text-shadow:
+    3px 3px 0 #000,
+    -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;   
 }
 
 .stats-image-entry {
@@ -174,38 +189,65 @@ div {
 }
 
 .button {
-   width:200px; 
-   height:50px; 
+    width:200px; 
+    height:50px; 
     vertical-align:middle;
     padding:7px;
     margin-bottom:10px;
-   background-image: url(images/button.png);   
+    background-image: url(images/button.png);   
     margin-right: auto;
-margin-left: auto;
+    margin-left: auto;
+}
+
+.button:active{
+    background-image: url(images/button-press.png); 
+    padding-top:19px;
+}
+.button:hover{
+    background-image: url(images/button-hover.png);  
+    padding-top:13px;
 }
 
 .button-red {
-       width:200px; 
-   height:50px; 
+    width:200px; 
+    height:50px; 
     vertical-align:middle;
     padding:7px;
     margin-bottom:10px;
-   background-image: url(images/button-red.png);   
+    background-image: url(images/button-red.png);   
     margin-right: auto;
-margin-left: auto;
+    margin-left: auto;
     display: inline-block;
 }
 
+.button-red:active{
+    background-image: url(images/button-red-press.png); 
+    padding-top:19px;
+}
+.button-red:hover{
+    background-image: url(images/button-red-hover.png);   
+    padding-top:13px;
+}
+
 .button-next {
-       width:200px; 
-   height:50px; 
+    width:200px; 
+    height:50px; 
     vertical-align:middle;
     padding:7px;
     margin-bottom:10px;
-   background-image: url(images/button-next.png);   
+    background-image: url(images/button-next.png);   
     margin-right: auto;
-margin-left: auto;
+    margin-left: auto;
     display: inline-block;
+}
+
+.button-next:active{
+    background-image: url(images/button-next-press.png);  
+    padding-top:19px;
+}
+.button-next:hover{
+    background-image: url(images/button-next-hover.png);   
+    padding-top:13px;
 }
 
 .all-buttons {

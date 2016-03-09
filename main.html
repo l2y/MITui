@@ -23,7 +23,7 @@
 <!-- Main Screen -->
 <div id="main-screen" ng-app="myApp" ng-controller="myCtrl">
     <div id="start-screen" class="show">
-        <div id="start-instruction" class="above-transparent">Instructions will go here!</div>
+        <div id="start-instruction" class="above-transparent stroke">Instructions will go here!</div>
 <!--        <img id="start" class="above-transparent" src="images/start.png" alt="START" onclick="startIt()">-->
         
 <!--        water/hello/how are you/i am good/i love you/ice cream/thank you-->
@@ -48,7 +48,7 @@
     </div>
     
     <div id="start-next-screen" class="hidden">
-        <div id="action-next-instruction" class="above-transparent">Instructions will go here!</div>
+        <div id="action-next-instruction" class="above-transparent stroke">Instructions will go here!</div>
         <div class="all-buttons">
             <div class="button above-transparent" alt="START" onclick="startIt()">Continue</div>
         </div>
@@ -58,11 +58,11 @@
             <div class="blue"></div>
         </div>
     
-    <div id="action-screen">
+    <div id="action-screen" class="hidden">
 
         <div class="word-area">
 <!--            <img id="word" class="header" src="images/water.jpg" alt="WATER">-->
-            <div id="word" class="header-word" alt="WORD">Fill in Phrase</div>
+            <div id="word" class="header-word stroke" alt="WORD">Fill in Phrase</div>
             <div id="action-instruction" class="header">INSTRUCTION</div>
 <!--            <img class="image" class="header" src="images/water_image.jpg" alt="WATER IMAGE">-->
             <!--    a blinking light to represent the physical feedback-->
@@ -181,6 +181,9 @@
                 <td class="stats-sub-entry-score">0</td>
             </tr>
         </table>
+        
+        <div class="button above-transparent" alt="RESTART" onclick="location.reload(true)">Restart</div>
+        
     </div>
 </div>
     
