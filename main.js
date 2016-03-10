@@ -29,15 +29,12 @@ var rafID = null;
 var analyserContext = null;
 var recIndex = 0;
 var word = "";
-var stepToAudio = [ 0, 0, 0, 0, 1] 
+var stepToAudio = [ 1, 0, 2, 0, 1] 
 var _audioArray;
 
 window.onload = function(e) {
     var w = window.innerWidth - 100;
     var h = window.innerHeight - 100;
-    
-    w = (window.innerWidth - document.getElementById("analyser").offsetWidth )/2 - 50;
-    document.getElementById("analyser").style.marginLeft = w + "px";
 
     w = (window.innerWidth - 500 )/2 - 50;
     document.getElementById("continue-button").style.marginLeft = w + "px";
@@ -227,34 +224,41 @@ function setAudio(){
     //hold all audio in global then pointers to current
     var w = $("#word").text();
     if (w == 'Water') {
-        var audio1 = new Audio('sound/water_110_195_words.wav');
-        var audio2 = new Audio('sound/water_110_195_hum.wav');
-        _audioArray = [ audio1, audio2];
+        var audio1 = new Audio('sound/Water (higher pitch).wav');
+        var audio2 = new Audio('sound/Water (higher pitch)_humming.wav');
+        var audio3 = new Audio('sound/Water (higher pitch)_fade.wav');
+        _audioArray = [ audio1, audio2, audio3];
     } else if (w == 'Hello') {
         var audio1 = new Audio('sound/Hello.wav');
         var audio2 = new Audio('sound/Hello_humming.wav');
+        var audio3 = new Audio('sound/Hello_fade.wav');
         console.log(audio1);
         _audioArray = [ audio1, audio2];
     } else if (w == 'How Are You'){
         var audio1 = new Audio('sound/How Are You.wav');
         var audio2 = new Audio('sound/How Are You_humming.wav');
+        var audio3 = new Audio('sound/How Are You_fade.wav');
         _audioArray = [ audio1, audio2];
     } else if (w == 'I Am Good'){
-        var audio1 = new Audio('sound/I am Good.wav');
-        var audio2 = new Audio('sound/I am Good_humming.wav');
+        var audio1 = new Audio('sound/I Am Good.wav');
+        var audio2 = new Audio('sound/I Am Good_humming.wav');
+        var audio3 = new Audio('sound/I Am Good_fade.wav');
         _audioArray = [ audio, audio2];
     } else if (w == 'I Love You'){
         var audio1 = new Audio('sound/I Love You.wav');
         var audio2 = new Audio('sound/I Love You_humming.wav');
+        var audio3 = new Audio('sound/I Love You_fade.wav');
         _audioArray = [ audio1, audio2];
     } else if (w == 'Ice Cream'){
         var audio1 = new Audio('sound/Ice Cream.wav');
         var audio2 = new Audio('sound/Ice Cream_humming.wav');
+        var audio3 = new Audio('sound/Ice Cream_fade.wav');
         _audioArray = [ audio1, audio2];
     } else if (w == 'Thank You'){
         var audio1 = new Audio('sound/Thank You.wav');
         var audio2 = new Audio('sound/Thank You_humming.wav');
-        _audioArray = [audio1, audio2];
+        var audio3 = new Audio('sound/Thank You_fade.wav');
+        _audioArray = [audio1, audio2, audio3];
     }
     return _audioArray;
 }
