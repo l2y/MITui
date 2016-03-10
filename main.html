@@ -70,7 +70,7 @@
         
         <!--    the visual representation of the person's created waveform - this will be dynamic..-->
         <canvas id="analyser" width="1400px" height="100">
-        </canvas> 
+        </canvas>
         
         <!--    the visual representation of the waveform - constant except for when in moton ..-->
         <div id="example-analyser">
@@ -83,10 +83,6 @@
     <!-- Continue Screen -->
     <div id="continue-screen" class="hidden">
         <div id="continue-button">
-<!--
-            <img class="above-transparent" id="retry" src="images/retry.png" alt="RETRY" onclick="sameSession()">
-            <img class="above-transparent" id="next-exercise" src="images/next.png" alt="NEXT" onclick="nextSession()">
--->
             <div>
             <div id="left" class="button-red above-transparent" alt="RETRY" onclick="sameSession()">Retry</div>
             <div id="right" class="button-next above-transparent" alt="NEXT" onclick="nextSession()">Next</div>
@@ -95,6 +91,13 @@
 
         <div class="transparent"></div>
     </div>  
+    
+    <div id="restart-screen" class="hidden">
+        <div id="restart" class="stroke">Good Job! Again?</div>
+        <div class="all-buttons">
+            <div class="button above-transparent" alt="RESTART" onclick="location.reload(true)">Restart</div>
+        </div>
+    </div>
     
     <div id="stats-screen" class="hidden">
         <img class="above-transparent" id="stats-header" src="images/stats_header.png" alt="STATISTICS">
@@ -181,8 +184,6 @@
                 <td class="stats-sub-entry-score">0</td>
             </tr>
         </table>
-        
-        <div class="button above-transparent" alt="RESTART" onclick="location.reload(true)">Restart</div>
         
     </div>
 </div>

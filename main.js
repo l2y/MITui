@@ -33,12 +33,6 @@ var stepToAudio = [ 1, 0, 2, 0, 1]
 var _audioArray;
 
 window.onload = function(e) {
-    var w = window.innerWidth - 100;
-    var h = window.innerHeight - 100;
-
-    w = (window.innerWidth - 500 )/2 - 50;
-    document.getElementById("continue-button").style.marginLeft = w + "px";
-    
     beginSession();
 }
 
@@ -344,8 +338,11 @@ function beginSession() {
     //stats screen
     } else {
 
-        $("#stats-screen").addClass("show");
-        $("#stats-screen").removeClass("hidden");
+//        $("#stats-screen").addClass("show");
+//        $("#stats-screen").removeClass("hidden");
+        
+        $("#restart-screen").addClass("show");
+        $("#restart-screen").removeClass("hidden");
         
         $("#continue-screen").addClass("hidden");
         $("#continue-screen").removeClass("show");  
