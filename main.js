@@ -29,7 +29,9 @@ var rafID = null;
 var analyserContext = null;
 var recIndex = 0;
 var word = "";
-var stepToAudio = [ 1, 0, 2, 0, 1] 
+//hum+sing, sing, sing fade, sing, question
+var stepToAudio = [ 1, 0, 2, 0, 3] 
+var timeCountdownAudio = [0, 0 ,0, 16000, 4000];
 var _audioArray;
 
 //Instructions
@@ -49,6 +51,7 @@ function startIt(w) {
     word = w;
     $("#word").text(w);
     instructionAudio[CurrentStep].pause();
+    instructionAudio[CurrentStep].currentTime = 0;
     
     $('.circle').addClass('open');
         $("#start-screen").addClass("fadeOut");
@@ -210,47 +213,52 @@ function gotStream(stream) {
         
        	audioRecorder.record(); 
        	postPulse();
-        //countdown here
+        if (CurrentStep == 4 || CurrentStep == 3)
+                    _audioArray[stepToAudio[CurrentStep]].play();
         setTimeout(function() {
-            $("#countdown").empty();
-            $("#countdown").html(3);
             
             setTimeout(function() {
                 $("#countdown").empty();
-                $("#countdown").html(2);
-                
+                $("#countdown").html(3);
+
                 setTimeout(function() {
                     $("#countdown").empty();
-                    $("#countdown").html(1);
-                    
+                    $("#countdown").html(2);
+
                     setTimeout(function() {
                         $("#countdown").empty();
-                        $("#countdown").html('GO');
+                        $("#countdown").html(1);
 
                         setTimeout(function() {
-                            $("#countdown-screen").addClass("hidden");
-                            $("#countdown-screen").removeClass("show"); 
-
                             $("#countdown").empty();
-                            $("#countdown").html('.');
-
-                            _audioArray[stepToAudio[CurrentStep]].play();
-                            updateAnalysers();
+                            $("#countdown").html('GO');
 
                             setTimeout(function() {
-                                if (CurrentStep == 3) {
-                                    var xmlhttp = new XMLHttpRequest();
-                                    xmlhttp.addEventListener("load", reqListener);
-                                    xmlhttp.open("GET","http://localhost:90"); 
-                                    xmlhttp.send(null);
-                                }
-                                endSession();
-                            }, 16000);
+                                $("#countdown-screen").addClass("hidden");
+                                $("#countdown-screen").removeClass("show"); 
+
+                                $("#countdown").empty();
+                                $("#countdown").html('.');
+
+                                if (CurrentStep != 4 && CurrentStep != 3)
+                                    _audioArray[stepToAudio[CurrentStep]].play();
+                                updateAnalysers();
+
+                                setTimeout(function() {
+                                    if (CurrentStep == 3) {
+                                        var xmlhttp = new XMLHttpRequest();
+                                        xmlhttp.addEventListener("load", reqListener);
+                                        xmlhttp.open("GET","http://localhost:90"); 
+                                        xmlhttp.send(null);
+                                    }
+                                    endSession();
+                                }, 16000);
+                            }, 1000);
                         }, 1000);
                     }, 1000);
                 }, 1000);
             }, 1000);
-        }, 1000);
+        }, timeCountdownAudio[CurrentStep]);
 				
     }, 3000);
 }
@@ -260,39 +268,46 @@ function setAudio(){
     var w = $("#word").text();
     if (w == 'Water') {
         var audio1 = new Audio('sound/Water (higher pitch).wav');
-        var audio2 = new Audio('sound/Water (higher pitch)_humming.wav');
+        var audio2 = new Audio('sound/Water (higher pitch)_hum_sing.wav');
         var audio3 = new Audio('sound/Water (higher pitch)_fade.wav');
-        _audioArray = [audio1, audio2, audio3];
+        var audio4 = new Audio('sound/Water (higher pitch)_question.wav');
+        _audioArray = [audio1, audio2, audio3, audio4];
     } else if (w == 'Hello') {
         var audio1 = new Audio('sound/Hello.wav');
-        var audio2 = new Audio('sound/Hello_humming.wav');
+        var audio2 = new Audio('sound/Hello_hum_sing.wav');
         var audio3 = new Audio('sound/Hello_fade.wav');
-        _audioArray = [audio1, audio2, audio3];
+        var audio4 = new Audio('sound/Hello_question.wav');
+        _audioArray = [audio1, audio2, audio3, audio4];
     } else if (w == 'How Are You'){
         var audio1 = new Audio('sound/How Are You.wav');
-        var audio2 = new Audio('sound/How Are You_humming.wav');
+        var audio2 = new Audio('sound/How Are You_hum_sing.wav');
         var audio3 = new Audio('sound/How Are You_fade.wav');
-        _audioArray = [audio1, audio2, audio3];
+        var audio4 = new Audio('sound/How Are You_question.wav');
+        _audioArray = [audio1, audio2, audio3, audio4];
     } else if (w == 'I Am Good'){
         var audio1 = new Audio('sound/I Am Good.wav');
-        var audio2 = new Audio('sound/I Am Good_humming.wav');
+        var audio2 = new Audio('sound/I Am Good_hum_sing.wav');
         var audio3 = new Audio('sound/I Am Good_fade.wav');
-        _audioArray = [audio1, audio2, audio3];
+        var audio4 = new Audio('sound/I Am Good_question.wav');
+        _audioArray = [audio1, audio2, audio3, audio4];
     } else if (w == 'I Love You'){
         var audio1 = new Audio('sound/I Love You.wav');
-        var audio2 = new Audio('sound/I Love You_humming.wav');
+        var audio2 = new Audio('sound/I Love You_hum_sing.wav');
         var audio3 = new Audio('sound/I Love You_fade.wav');
-        _audioArray = [audio1, audio2, audio3];
+        var audio4 = new Audio('sound/I Love You_question.wav');
+        _audioArray = [audio1, audio2, audio3, audio4];
     } else if (w == 'Ice Cream'){
         var audio1 = new Audio('sound/Ice Cream.wav');
-        var audio2 = new Audio('sound/Ice Cream_humming.wav');
+        var audio2 = new Audio('sound/Ice Cream_hum_sing.wav');
         var audio3 = new Audio('sound/Ice Cream_fade.wav');
-        _audioArray = [audio1, audio2, audio3];
+        var audio4 = new Audio('sound/Ice Cream_question.wav');
+        _audioArray = [audio1, audio2, audio3, audio4];
     } else if (w == 'Thank You'){
         var audio1 = new Audio('sound/Thank You.wav');
-        var audio2 = new Audio('sound/Thank You_humming.wav');
+        var audio2 = new Audio('sound/Thank You_hum_sing.wav');
         var audio3 = new Audio('sound/Thank You_fade.wav');
-        _audioArray = [audio1, audio2, audio3];
+        var audio4 = new Audio('sound/Thank You_question.wav');
+        _audioArray = [audio1, audio2, audio3, audio4];
     }
     return _audioArray;
 }
@@ -352,10 +367,10 @@ function beginSession() {
     //next screen
     if (CurrentStep < INSTRUCTIONS.length) {
         // Play instructions
-        if (CurrentStep != 4)
-            instructionAudio[CurrentStep].play();
+        instructionAudio[CurrentStep].play();
         
         console.log('play ' + instructionAudio[CurrentStep].src);
+        console.log(CurrentStep);
         
         $("#start-instruction").empty();
         $("#start-instruction").html(INSTRUCTIONS[CurrentStep]);
