@@ -1,10 +1,10 @@
 //MIT
 var STEPS = ["Listen", "Sing The Phrase", "Sing the Phrase Again", "Listen", "Independent Singing"];
-var INSTRUCTIONS = ["Listen to the tones, this will be the pitch you will be singing at in the next step",
-                    "Try and sing along with the phrase",
-                    "Try and sing along with the phrase again, the sound will slowly fade out near the end. Keep singing until indicated",
-                    "Once again, listen to the phrase",
-                    "Sing the phrase on your own."];
+var INSTRUCTIONS = ["Listen to the humming of the phrase, followed by the singing of the phrase.",
+                    "Try and sing the phrase together with the audio.",
+                    "Try and sing the phrase together with the audio. Keep singing as the audio fades out.",
+                    "First, listen to the audio. After the audio is finished, try and sing the phrase on your own.",
+                    "Try and answer the following question, by repeating the phrase you just learnt."];
 var AUDIO_FILE = [];
 var CurrentStep = 0;
 
@@ -32,6 +32,15 @@ var word = "";
 var stepToAudio = [ 1, 0, 2, 0, 1] 
 var _audioArray;
 
+//Instructions
+
+var step1 = new Audio('sound/Step 1 Humming.wav');
+var step2 = new Audio('sound/Step 2 Unison Intoning.wav');
+var step3 = new Audio('sound/Step 3 Unison Intoning with Fading.wav');
+var step4 = new Audio('sound/Step 4 Immediate Repetition.wav');
+var step5 = new Audio('sound/Step 5 Response to a Probe Question.wav');
+var instructionAudio = [step1, step2, step3, step4, step5];
+
 window.onload = function(e) {   
     beginSession();
 }
@@ -39,7 +48,7 @@ window.onload = function(e) {
 function startIt(w) {
     word = w;
     $("#word").text(w);
-    
+    instructionAudio[CurrentStep].pause();
     
     $('.circle').addClass('open');
         $("#start-screen").addClass("fadeOut");
@@ -346,6 +355,12 @@ function sameSession() {
 function beginSession() {
     //next screen
     if (CurrentStep < INSTRUCTIONS.length) {
+        // Play instructions
+        if (CurrentStep != 4)
+            instructionAudio[CurrentStep].play();
+        
+        console.log('play ' + instructionAudio[CurrentStep].src);
+        
         $("#start-instruction").empty();
         $("#start-instruction").html(INSTRUCTIONS[CurrentStep]);
         $("#action-instruction").empty();
@@ -371,7 +386,7 @@ function beginSession() {
             $("#start-next-screen").addClass("show");
             $("#start-next-screen").removeClass("hidden");
         }
-    //stats screen
+    //stats/restart screen
     } else {
 
 //        $("#stats-screen").addClass("show");
