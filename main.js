@@ -32,7 +32,7 @@ var word = "";
 var stepToAudio = [ 1, 0, 2, 0, 1] 
 var _audioArray;
 
-window.onload = function(e) {
+window.onload = function(e) {   
     beginSession();
 }
 
@@ -55,7 +55,10 @@ function startIt(w) {
             $('#action-screen').removeClass('hidden');
     
             $('#action-screen').addClass('fadeIn');
-            $('#action-screen').addClass('animated');   
+            $('#action-screen').addClass('animated');  
+    
+            $("#countdown-screen").addClass("show");
+            $("#countdown-screen").removeClass("hidden"); 
             setTimeout(function() {
                 setTimeout(function() {
                     initAudio();
@@ -198,18 +201,47 @@ function gotStream(stream) {
         
        	audioRecorder.record(); 
        	postPulse();
-		_audioArray[stepToAudio[CurrentStep]].play();
-        updateAnalysers();
-				
+        //countdown here
         setTimeout(function() {
-            if (CurrentStep == 3) {
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.addEventListener("load", reqListener);
-                xmlhttp.open("GET","http://localhost:90"); 
-                xmlhttp.send(null);
-            }
-            endSession();
-        }, 16000);
+            $("#countdown").empty();
+            $("#countdown").html(3);
+            
+            setTimeout(function() {
+                $("#countdown").empty();
+                $("#countdown").html(2);
+                
+                setTimeout(function() {
+                    $("#countdown").empty();
+                    $("#countdown").html(1);
+                    
+                    setTimeout(function() {
+                        $("#countdown").empty();
+                        $("#countdown").html('GO');
+
+                        setTimeout(function() {
+                            $("#countdown-screen").addClass("hidden");
+                            $("#countdown-screen").removeClass("show"); 
+
+                            $("#countdown").empty();
+                            $("#countdown").html('.');
+
+                            _audioArray[stepToAudio[CurrentStep]].play();
+                            updateAnalysers();
+
+                            setTimeout(function() {
+                                if (CurrentStep == 3) {
+                                    var xmlhttp = new XMLHttpRequest();
+                                    xmlhttp.addEventListener("load", reqListener);
+                                    xmlhttp.open("GET","http://localhost:90"); 
+                                    xmlhttp.send(null);
+                                }
+                                endSession();
+                            }, 16000);
+                        }, 1000);
+                    }, 1000);
+                }, 1000);
+            }, 1000);
+        }, 1000);
 				
     }, 3000);
 }
