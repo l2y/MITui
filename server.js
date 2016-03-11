@@ -43,14 +43,42 @@ function pulse() {
 	sp.write("HELLO\r\n");
 }
 
-function pulseStream(n) {
-	pulse();
-	if(n<6) {
-		setTimeout(function(){
-			pulseStream(n+1);
-		},950);
+function pulseStream(barPosition,beatPosition,Syllables) {
+	if(barPosition<=4) {
+		if(beatPosition <= Syllables ) {
+			pulse();
+		}
+		if(beatPosition<4) {
+			setTimeout(function(){
+				pulseStream(barPosition,beatPosition+1,Syllables);
+			},950);
+		} else {
+			setTimeout(function(){
+				pulseStream(barPosition+1,1,Syllables);
+			},950);
+		}
 	}
 }
+
+function syllableCount(word) {
+	switch(word) {
+		case "Water":
+			return 2;
+		case "Hello":
+			return 2;
+		case "How Are You":
+			return 3;
+		case "I Am Good":
+			return 3;
+		case "I Love You":
+			return 3;
+		case "Ice Cream":
+			return 2;
+		case "Thank You":
+			return 2;
+	}
+}
+
 // scriptFile must be a full path to a shell script
 exports.exec = function (scriptFile, workingDirectory, environment, callback) {
     var cmd;
@@ -73,6 +101,8 @@ exports.exec = function (scriptFile, workingDirectory, environment, callback) {
 }
 
 var http = require('http');
+var previousWord = '';
+recordingCount = 0;
 
 //Lets define a port we want to listen to
 const PORT80=80;
@@ -92,7 +122,8 @@ function handleRequest(request, response){
 			var form = new formidable.IncomingForm();
 			form.uploadDir = "/Users/Sarah Kelly/Desktop/classifier";
 			form.on('file',function(field,file){
-				fs.rename(file.path, form.uploadDir + "/output.wav");
+				fs.rename(file.path, form.uploadDir + "/" + recordingCount + ".wav");
+				recordingCount ++;
 			});	
 			form.parse(request,function(err,fields,files){
 				if(err){
@@ -103,16 +134,28 @@ function handleRequest(request, response){
 		}
 		else
 		{
-			setTimeout(function() {
-				pulseStream(1);
-			},500);
+			word = '';
+			request.on('data',function(data){
+				word+=data;
+				if(word=='Next Step'){
+					setTimeout(function() {
+						pulseStream(1,1,syllableCount(previousWord));
+					},500);
+				} else {
+					setTimeout(function() {
+						previousWord = word;
+						pulseStream(1,1,syllableCount(word));
+					},500);
+				}
+			});
 		}
 		response.end();
 	}
 }
 
 function handleResult(request, response){
-  	response.setHeader('Access-Control-Allow-Origin','*'); 
+/*
+  	response.setHeader('Access-Control-Allow-Origin','*');
 	var fs = require('fs');
     do {                                           
     	var file = "C:\\Users\\Sarah Kelly\\Desktop\\classifier\\pitch_detection_percentage.txt";
@@ -127,6 +170,8 @@ function handleResult(request, response){
 	  	response.write(data);
 	  	response.end();
 	});
+*/
+response.end();
 }
 
 //Create a server
