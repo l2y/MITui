@@ -212,9 +212,13 @@ function gotStream(stream) {
         _audioArray = setAudio();
         
        	audioRecorder.record(); 
+<<<<<<< HEAD
        	postPulse();
         if (CurrentStep == 4 || CurrentStep == 3)
-            _audioArray[stepToAudio[CurrentStep]].play();
+                    _audioArray[stepToAudio[CurrentStep]].play();
+=======
+        //countdown here
+>>>>>>> 009751a1a2d25823a09db8c1497d7d2df20192bc
         setTimeout(function() {
             
             setTimeout(function() {
@@ -231,17 +235,12 @@ function gotStream(stream) {
 
                         setTimeout(function() {
                             $("#countdown").empty();
+<<<<<<< HEAD
                             $("#countdown").html('GO');
 
                             setTimeout(function() {
                                 $("#countdown-screen").addClass("hidden");
                                 $("#countdown-screen").removeClass("show"); 
-//                                _audioArray[stepToAudio[CurrentStep]].play();
-                                if(word == null){
-                                    postPulse('Next Step');
-                                } else {
-                                    postPulse(word);
-                                }
 
                                 $("#countdown").empty();
                                 $("#countdown").html('.');
@@ -258,8 +257,29 @@ function gotStream(stream) {
                                         xmlhttp.send(null);
                                     }
                                     endSession();
-                                }, 1000);
+                                }, 16000);
                             }, 1000);
+=======
+                            $("#countdown").html('.');
+
+                            _audioArray[stepToAudio[CurrentStep]].play();
+							if(word == null){
+								postPulse('Next Step');
+							} else {
+								postPulse(word);
+							}
+                            updateAnalysers();
+
+                            setTimeout(function() {
+                                if (CurrentStep == 3) {
+									var xmlhttp = new XMLHttpRequest();
+                                    xmlhttp.addEventListener("load", reqListener);
+                                    xmlhttp.open("GET","http://localhost:90"); 
+                                    xmlhttp.send(null);
+                                }
+                                endSession();
+                            }, 16000);
+>>>>>>> 009751a1a2d25823a09db8c1497d7d2df20192bc
                         }, 1000);
                     }, 1000);
                 }, 1000);
@@ -276,7 +296,7 @@ function setAudio(){
         var audio1 = new Audio('sound/Water (higher pitch).wav');
         var audio2 = new Audio('sound/Water (higher pitch)_hum_sing.wav');
         var audio3 = new Audio('sound/Water (higher pitch)_fade.wav');
-        var audio4 = new Audio('sound/Water_question.wav');
+        var audio4 = new Audio('sound/Water (higher pitch)_question.wav');
         _audioArray = [audio1, audio2, audio3, audio4];
     } else if (w == 'Hello') {
         var audio1 = new Audio('sound/Hello.wav');
@@ -347,10 +367,10 @@ function initAudio() {
 function endSession() {
     $('#continue-screen').removeClass('hidden');
     $('#continue-screen').addClass('show');
-    audioRecorder.stop();	
+		audioRecorder.stop();	
     cancelAnalyserUpdates();
-	_audioArray[stepToAudio[CurrentStep]].pause();
-	_audioArray[stepToAudio[CurrentStep]].currentTime = 0;
+	_audioArray[stepToAudio[CurrentStep]].pause()
+	_audioArray[stepToAudio[CurrentStep]].currentTime=0;
 	audioRecorder.getBuffers( gotBuffers );
 }
 
@@ -374,6 +394,9 @@ function beginSession() {
     if (CurrentStep < INSTRUCTIONS.length) {
         // Play instructions
         instructionAudio[CurrentStep].play();
+        
+        console.log('play ' + instructionAudio[CurrentStep].src);
+        console.log(CurrentStep);
         
         $("#start-instruction").empty();
         $("#start-instruction").html(INSTRUCTIONS[CurrentStep]);
