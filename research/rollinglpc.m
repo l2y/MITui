@@ -5,9 +5,13 @@ ofs = 20000;
 y = y(ofs:ofs+(fs*0.20));
 L = length(y);
 w = hamming(L);
-freq = fs*(0:round(L/2))/L;
+y = y.*w;
+%freq = fs*(0:round(L/2))/L;
 
-function [formants] = formants(windowedsignal,fs)
+windowedsignal = y;
+
+% returns first 3 formants for a windowed signal
+%function formants = formants(windowedsignal,fs)
     L = length(windowedsignal);
     freq = fs*(0:round(L/2))/L;
     p = fs/1000 +5 ;
@@ -17,8 +21,19 @@ function [formants] = formants(windowedsignal,fs)
     %plot(freq,lspec);
     %xlim([0 5000]);
     [~,locs] = findpeaks(lspec);
-    formants = freq(locs(1:3));
-end
+    if freq(locs(1)) < 200
+        formants = freq(locs(2:4));
+    else
+        formants = freq(locs(1:3));
+    end
+    
+    %include checks to discard formants that are too low (these are F0)
+    %lowest avg. frequency of any vowel for F1 is 240hz. let's use a cutoff
+    % of 200.
+    
+    
+    
+%end
 
 %function [formants] = rollinglpc(input,windowlength,fs)  % windowlength as # of samples
     
