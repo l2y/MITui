@@ -258,7 +258,7 @@ function gotStream(stream) {
                                         xmlhttp.send(null);
                                     }
                                     endSession();
-                                }, 1000);
+                                }, 16000);
                             }, 1000);
                         }, 1000);
                     }, 1000);
