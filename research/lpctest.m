@@ -42,10 +42,42 @@ xlabel('Frequency (Hz)');
 ylabel('Magnitude (dB)');
 legend('raw signal FFT','hamming window signal FFT','hamming window signal LPC','raw signal LPC');
 
-%% LPC test w/ resampling & preemphasis
+%% LPC test w/ resampling
 % from doc: 'decimate' lowpass filters the input to guard against aliasing and downsamples the result.
 close all;
 [y,fs] = audioread('Hello-short.wav');
 
-y10k = decimate(y, 4);
+r = 4;                      % decimation factor
+y10k = decimate(y, r);
+fsn = fs/r;                 % 11025 Hz
+
+ofs = 5000;
+y10k = y10k(ofs:ofs+(fsn*0.20));
+LN = length(y10k);
+t = 0:1/fsn:(LN-1)/fsn;
+w = hamming(LN);
+y10k = y10k.*w;
+
+freqn = fsn*(0:round(LN/2))/LN;
+
+pn = fsn/1000 + 5;
+[an,gn] = lpc(y10k,pn);
+lspecn = freqz(gn,an,freqn,fsn);
+lspecn = db(abs(lspecn));
+plot(freqn,lspecn);
+xlabel('Frequency (Hz)');
+ylabel('Magnitude (dB)');
+xlim([0 5000]);
+[~,locs] = findpeaks(lspecn);
+if freqn(locs(1)) < 200
+    formants = freq(locs(2:4));
+else
+    formants = freq(locs(1:3));
+end
+
+
+
+
+
+
 
