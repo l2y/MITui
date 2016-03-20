@@ -75,3 +75,50 @@ histogram(pitch,100)
 %redistribute samples that are > umean+stddev around umean
 %should help eliminate some issues w/ pitch discontinuity
 %and sibilance.
+
+%estimate kernel for this dist
+pd2 = fitdist(pitch','Kernel');
+xp = (0:0.001:1);
+ypd2 = pdf(pd2,xp);
+ycd2 = cdf(pd2,xp);
+
+%use findpeaks, and 2.5 as the heuristic.
+[pks,idx] = findpeaks(ypd2);
+highestmean = 0.0;
+hmeanidx = 0;
+for i = 1:length(pks)
+    if pks(i) > 2.5
+        highestmean = pks(i);
+        hmeanidx = idx(i);
+    end
+end
+
+figure()
+subplot(211)
+plot(xp,ypd2);
+subplot(212)
+plot(xp,ycd2);
+
+threshidx = find(ycd2>0.95,1);
+plot(ycd2)
+
+% because our pdf has 1000 samples
+% then this corresponds between 0 and 1 for
+% normalized pitch. 
+% threshidx / 1000 is then the NORMALIZED pitch cutoff.
+
+npitch = pitch;
+npitch(npitch>(threshidx/1000)) = hmeanidx/1000;
+figure()
+plot(t,pitch);
+hold on
+plot(t,npitch);
+xlabel('time(s)');
+ylabel('Normalized Pitch');
+
+
+
+
+
+
+
