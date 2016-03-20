@@ -29,7 +29,7 @@ function createEnv(params) {
     return env;
 }
 
-var serialportname = 'COM15';
+var serialportname = 'COM4';
 var sp = new serialport.SerialPort(serialportname, {
 	baudRate: 9600,
 	dataBits: 8,
@@ -51,11 +51,11 @@ function pulseStream(barPosition,beatPosition,Syllables) {
 		if(beatPosition<4) {
 			setTimeout(function(){
 				pulseStream(barPosition,beatPosition+1,Syllables);
-			},950);
+			},1000);
 		} else {
 			setTimeout(function(){
 				pulseStream(barPosition+1,1,Syllables);
-			},950);
+			},1000);
 		}
 	}
 }
