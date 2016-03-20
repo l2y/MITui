@@ -29,7 +29,6 @@ function createEnv(params) {
     return env;
 }
 
-<<<<<<< HEAD
 // var serialportname = 'COM15';
 // var sp = new serialport.SerialPort(serialportname, {
 // 	baudRate: 9600,
@@ -39,17 +38,6 @@ function createEnv(params) {
 // 	flowControl: false,
 // 	parser: serialport.parsers.readline("\r\n")
 // });
-=======
-var serialportname = 'COM4';
-var sp = new serialport.SerialPort(serialportname, {
-	baudRate: 9600,
-	dataBits: 8,
-	parity: 'none',
-	stopBits: 1,
-	flowControl: false,
-	parser: serialport.parsers.readline("\r\n")
-});
->>>>>>> 883ac42dfff0d8f05343f0d79e22c0fd46c11cf3
 
 function pulse() {
 	sp.write("HELLO\r\n");
