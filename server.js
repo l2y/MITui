@@ -29,7 +29,7 @@ function createEnv(params) {
     return env;
 }
 
-var serialportname = 'COM4';
+var serialportname = 'COM15';
 var sp = new serialport.SerialPort(serialportname, {
 	baudRate: 9600,
 	dataBits: 8,
@@ -113,7 +113,7 @@ function handleRequest(request, response){
 	if(request.method == 'GET'){	
 		console.log('handling get request');
   		response.setHeader('Access-Control-Allow-Origin','*'); 
-		exec('C:\\Users\\Sarah Kelly\\Desktop\\classifier\\pitch_detection_matlab.bat');
+		exec('C:\\Users\\Cain\\workspace\\MITui\\pitch_detection_matlab.bat');
 		response.end();
 	}
 	else
@@ -138,14 +138,14 @@ function handleRequest(request, response){
 			request.on('data',function(data){
 				word+=data;
 				if(word=='Next Step'){
-					setTimeout(function() {
+					//setTimeout(function() {
 						pulseStream(1,1,syllableCount(previousWord));
-					},500);
+					//},500);
 				} else {
-					setTimeout(function() {
+					//setTimeout(function() {
 						previousWord = word;
 						pulseStream(1,1,syllableCount(word));
-					},500);
+					//},300);
 				}
 			});
 		}
