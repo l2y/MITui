@@ -1,12 +1,21 @@
 clear all
 close all
-[y,fs] = audioread('How Are You.wav');
+[y,fs] = audioread('I am Good.wav');
 
 % real talk, let's try downsampling it
 r = 4;
 y = decimate(y,r);
 fs = fs/r;
 
+
+% noise-robustness: we should cut off frequencies
+% above the nyquist frequencies before rectifying.
+% edit: decimate has a built in FIR filter
+% that removes frequency content above the nyquist rate
+% for the new sampling rate so we don't need to do this.
+
+fNy = fs/2;
+figure(1)
 plot(y);
 
 % fullwave rectify the filtered(?) signal
@@ -14,7 +23,7 @@ yrect = abs(y);
 plot(yrect);
 
 % LPF rectified signal at envelope cutoff (40Hz)
-fNy = fs/2;
+
 [B,A] = butter(2, 40/fNy);
 fenvelope = filtfilt(B,A,yrect);
 % bidirectional filter eliminates phase distortion

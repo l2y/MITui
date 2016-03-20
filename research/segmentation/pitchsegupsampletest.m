@@ -1,7 +1,7 @@
 % try to upsample pitch to 44100/4
 
 
-fileID = fopen('howareyoupitch.txt','r');
+fileID = fopen('./processedPitch/ParsedPitch I am Good.txt','r');
 formatSpec = '%f %f';
 sizeA = [2 Inf];
 
@@ -16,14 +16,11 @@ pitch = normalizesig(pitch,0,1);
 t = [0 t (length(fenvelope))/Fs];
 pitch = [pitch(1) pitch pitch(length(pitch))];
 
-
-
 %before resampling, we should add to the t and pitch
 %vectors so the times will line up appropriately.
 % to do this, we need to know the time "t" 
 % for the other signal.
 % this is the index of the last sample / Fs.
-
 
 [pitchrs,tr] = resample(pitch,t,Fs,'linear');
 
@@ -61,4 +58,20 @@ plot(smptr,envelopevar);
 hold off
 legend('rolling window pitch variance', ...
     'rolling window envelope variance');
+xlabel('f[n]');
+ylabel('variance');
 
+% figure to showcase nature of pitch contour:
+figure()
+subplot(221)
+plot(pitchrs)
+subplot(222)
+histogram(pitchrs,100)
+subplot(223)
+plot(pitch)
+subplot(224)
+histogram(pitch,100)
+%solution: cluster data, find upper mean.
+%redistribute samples that are > umean+stddev around umean
+%should help eliminate some issues w/ pitch discontinuity
+%and sibilance.
