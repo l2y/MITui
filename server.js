@@ -29,15 +29,15 @@ function createEnv(params) {
     return env;
 }
 
-var serialportname = 'COM4';
-var sp = new serialport.SerialPort(serialportname, {
-	baudRate: 9600,
-	dataBits: 8,
-	parity: 'none',
-	stopBits: 1,
-	flowControl: false,
-	parser: serialport.parsers.readline("\r\n")
-});
+// var serialportname = 'COM15';
+// var sp = new serialport.SerialPort(serialportname, {
+// 	baudRate: 9600,
+// 	dataBits: 8,
+// 	parity: 'none',
+// 	stopBits: 1,
+// 	flowControl: false,
+// 	parser: serialport.parsers.readline("\r\n")
+// });
 
 function pulse() {
 	sp.write("HELLO\r\n");
@@ -103,6 +103,7 @@ exports.exec = function (scriptFile, workingDirectory, environment, callback) {
 var http = require('http');
 var previousWord = '';
 recordingCount = 0;
+uploadDir = "C:\\Users\\Cain\\workspace\\MITui\\research";
 
 //Lets define a port we want to listen to
 const PORT80=80;
@@ -110,21 +111,36 @@ const PORT90=90;
 
 //We need a function which handles requests and send response
 function handleRequest(request, response){
-	if(request.method == 'GET'){	
+	if(request.method == 'GET'){
 		console.log('handling get request');
   		response.setHeader('Access-Control-Allow-Origin','*'); 
-		exec('C:\\Users\\Cain\\workspace\\MITui\\pitch_detection_matlab.bat');
+  		wavFile = uploadDir + "\\" + recordingCount + ".wav"
+  		pitchTier = uploadDir + "\\" + recordingCount + ".PitchTier"
+  		parsedPitch = uploadDir + "\\" + recordingCount + ".text"
+		exec('C:\\Users\\Cain\\workspace\\MITui\\pitch_detection_matlab.bat ' 
+			+ wavFile + ' ' + pitchTier + ' ' + parsedPitch);
 		response.end();
 	}
 	else
 	{
-		if(request.url == '/upload'){	
+		if(request.url == '/upload') {	
 			var form = new formidable.IncomingForm();
-			form.uploadDir = "/Users/Sarah Kelly/Desktop/classifier";
+			form.uploadDir = uploadDir;
 			form.on('file',function(field,file){
-				fs.rename(file.path, form.uploadDir + "/" + recordingCount + ".wav");
+				fs.rename(file.path, form.uploadDir + "\\" + recordingCount + ".wav");
+
+				console.log('handling get request');
+		  		response.setHeader('Access-Control-Allow-Origin','*'); 
+		  		wavFile = uploadDir + "\\" + recordingCount + ".wav"
+		  		pitchTier = uploadDir + "\\" + recordingCount + ".PitchTier"
+		  		parsedPitch = uploadDir + "\\" + recordingCount + ".text"
+				exec('C:\\Users\\Cain\\workspace\\MITui\\pitch_detection_matlab.bat ' 
+					+ wavFile + ' ' + pitchTier + ' ' + parsedPitch);
 				recordingCount ++;
-			});	
+				response.end();
+
+			});
+
 			form.parse(request,function(err,fields,files){
 				if(err){
 					console.error(err.message);
@@ -132,24 +148,24 @@ function handleRequest(request, response){
 				}
 			});
 		}
-		else
-		{
-			word = '';
-			request.on('data',function(data){
-				word+=data;
-				if(word=='Next Step'){
-					//setTimeout(function() {
-						pulseStream(1,1,syllableCount(previousWord));
-					//},500);
-				} else {
-					//setTimeout(function() {
-						previousWord = word;
-						pulseStream(1,1,syllableCount(word));
-					//},300);
-				}
-			});
-		}
-		response.end();
+		// else
+		// {
+		// 	word = '';
+		// 	request.on('data',function(data){
+		// 		word+=data;
+		// 		if(word=='Next Step'){
+		// 			//setTimeout(function() {
+		// 				pulseStream(1,1,syllableCount(previousWord));
+		// 			//},500);
+		// 		} else {
+		// 			//setTimeout(function() {
+		// 				previousWord = word;
+		// 				pulseStream(1,1,syllableCount(word));
+		// 			//},300);
+		// 		}
+		// 	});
+		// }
+		// response.end();
 	}
 }
 
