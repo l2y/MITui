@@ -20,6 +20,8 @@ fenvelope = filtfilt(B,A,yrect);
 % bidirectional filter eliminates phase distortion
 % but who cares about that tbh
 
+% normalize the envelope?
+fenvelope = normalizesig(fenvelope,0,1);
 
 hold on
 plot(fenvelope);
@@ -31,8 +33,8 @@ legend('amplitude of rectified signal','40Hz filtered signal');
 
 windowSize = (1.5e4 / 4);
 
-rwinvec = rolVarWin(fenvelope,windowSize);
+envelopevar = rolVarWin(fenvelope,windowSize);
 
-plot(rwinvec.*50);
+plot(envelopevar);
 hold on
 plot(fenvelope);
