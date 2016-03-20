@@ -64,7 +64,7 @@ for t = 1:L-windowSize
 end
 figure()
 
-rwinvec = [zeros([windowSize/2 1])' rwinvec'];
+rwinvec = [zeros([windowSize/2 1])' rwinvec' zeros([windowSize/2 1])'];
 
 plot(rwinvec.*50);
 hold on

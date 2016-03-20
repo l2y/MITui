@@ -1,4 +1,6 @@
-fileID = fopen('outputParsed.txt','r');
+clear all
+close all
+fileID = fopen('howareyoupitch.txt','r');
 formatSpec = '%f %f';
 sizeA = [2 Inf];
 
@@ -8,4 +10,24 @@ fclose(fileID);
 t = A(1,:);
 pitch = A(2,:);
 
-scatter(t,pitch);
+% try rolling variance window with ~18 samples on the pitch contour.
+windowSize = 18;
+L = length(pitch);
+rwinvec = zeros([L-windowSize 1]);
+
+for r = 1:L-windowSize
+    rwinvec(r) = var(pitch(r:r+windowSize));
+end
+
+
+rwinvec = [zeros([windowSize/2 1])' rwinvec' zeros([windowSize/2 1])'];
+
+[ax, h1, h2] = plotyy(t, pitch, t, rwinvec, 'scatter', 'plot');
+set(h1, 'CData', [1 0.5 0.5]);
+set(get(ax(1), 'Ylabel'), 'String', 'Frequency (Hz)');
+set(get(ax(2), 'Ylabel'), 'String', 'Rolling Variance');
+xlabel('Time (s)');
+
+legend('Praat pitch contour','18 sample rolling variance window');
+
+
