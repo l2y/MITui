@@ -211,7 +211,6 @@ function gotStream(stream) {
         
         _audioArray = setAudio();
         
-       	audioRecorder.record(); 
        	postPulse();
         if (CurrentStep == 4 || CurrentStep == 3)
             _audioArray[stepToAudio[CurrentStep]].play();
@@ -234,6 +233,7 @@ function gotStream(stream) {
                             $("#countdown").html('GO');
 
                             setTimeout(function() {
+                                audioRecorder.record(); 
                                 $("#countdown-screen").addClass("hidden");
                                 $("#countdown-screen").removeClass("show"); 
 //                                _audioArray[stepToAudio[CurrentStep]].play();
@@ -250,15 +250,21 @@ function gotStream(stream) {
                                     _audioArray[stepToAudio[CurrentStep]].play();
                                 updateAnalysers();
 
+                                var timeout = 16000;
+                                if (CurrentStep == 0) {
+                                    timeout = 32000;
+                                } else {
+                                    timeout = 16000;
+                                }
                                 setTimeout(function() {
-                                    if (CurrentStep == 3) {
-                                        var xmlhttp = new XMLHttpRequest();
-                                        xmlhttp.addEventListener("load", reqListener);
-                                        xmlhttp.open("GET","http://localhost:90"); 
-                                        xmlhttp.send(null);
-                                    }
+                                    // if (CurrentStep == 3) {
+                                    //     var xmlhttp = new XMLHttpRequest();
+                                    //     xmlhttp.addEventListener("load", reqListener);
+                                    //     xmlhttp.open("GET","http://localhost:90"); 
+                                    //     xmlhttp.send(null);
+                                    // }
                                     endSession();
-                                }, 16000);
+                                }, timeout);
                             }, 1000);
                         }, 1000);
                     }, 1000);
