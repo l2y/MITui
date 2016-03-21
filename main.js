@@ -213,7 +213,7 @@ function gotStream(stream) {
         _audioArray = setAudio();
         
         if (CurrentStep == 4 || CurrentStep == 3)
-            _audioArray[stepToAudio[CurrentStep]].play();
+        _audioArray[stepToAudio[CurrentStep]].play();
         setTimeout(function() {
             
             setTimeout(function() {
