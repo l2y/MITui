@@ -49,6 +49,9 @@ window.onload = function(e) {
 
 function startIt(w) {
     word = w;
+    if (word != null && word != "") {
+        newSession(w);
+    }
     $("#word").text(w);
     instructionAudio[CurrentStep].pause();
     instructionAudio[CurrentStep].currentTime = 0;
@@ -90,11 +93,14 @@ function gotBuffers( buffers ) {
 
 function doneEncoding( blob ) {
  	var fd = new FormData();
-	fd.append("upload", blob, "sample.wav");
+    // var data = "";
+    // if (word != null) data = word;
+	fd.append($("#word").text(), blob, "sample.wav");
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.overrideMimeType("multipart/form-data");
   	xmlhttp.open("POST","http://localhost:80/upload");
 	xmlhttp.send(fd);
+    console.log("Send uploads")
 }
 
 function convertToMono( input ) {
@@ -184,6 +190,20 @@ function postPulse(word, CurrentStep){
 	xmlhttp.send(word+','+CurrentStep);
 }
 
+function newSession( word ) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST","http://localhost:80/newSession");
+    xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+    xmlhttp.send(word);
+}
+
+function cont( cont ) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST","http://localhost:80/cont");
+    xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+    xmlhttp.send(cont);
+}
+
 function gotStream(stream) {
     inputPoint = audioContext.createGain();
     if (CurrentStep == 3) {
@@ -250,6 +270,7 @@ function gotStream(stream) {
                                     _audioArray[stepToAudio[CurrentStep]].play();
                                 updateAnalysers();
 
+                                var temp = 100;
                                 var timeout = 16000;
                                 if (CurrentStep == 0) {
                                     timeout = 32000;
@@ -264,12 +285,12 @@ function gotStream(stream) {
                                     //     xmlhttp.send(null);
                                     // }
                                     endSession();
-                                }, timeout);
-                            }, 1000);
-                        }, 1000);
-                    }, 1000);
-                }, 1000);
-            }, 1000);
+                                }, temp);
+                            }, 100);
+                        }, 100);
+                    }, 100);
+                }, 100);
+            }, 100);
         }, timeCountdownAudio[CurrentStep]);
 				
     }, 3000);
@@ -364,6 +385,7 @@ function nextSession() {
     //set the instruction to the next value
     //change audio file
     //tell matlab this will be the next session
+    cont("cont");
     CurrentStep++;
     beginSession();
 }
