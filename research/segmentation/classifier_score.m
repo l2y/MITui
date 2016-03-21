@@ -1,4 +1,4 @@
-function [score] = classifier_score( filepath, phrase_index )
+function [score,formants_actual] = classifier_score( filepath, phrase_index )
 %function [formants_actual] = classifier_score( envelopevar, y, fs )
 
 %Get expected values
@@ -66,6 +66,8 @@ rwinvec = rolVarWin(pitchrs,windowSize);
 % it is very sensitive to noise & that's not super ok?
 % please try and fix it.
 [pks_in,lcs_in]=findpeaks(envelopevar+rwinvec);
+figure()
+plot(envelopevar+rwinvec);
 [~,lcs]=peaks_custom(pks_in,lcs_in);
 length(lcs)
 formants_actual = zeros(syllable_count,3);
@@ -73,9 +75,10 @@ i = 1;
 bar_count = 1;
 while(i<(length(lcs)))
     if(bar_count<=syllable_count)
+        section = y(lcs(i):lcs(i+1));
         middle = (lcs(i)+lcs(i+1))/2;
-        sample = y(middle-fs*.01:middle+fs*.01);
-        formants = getLPC(sample,fs);
+        sample = y(middle-fs*.02:middle+fs*.02);
+        formants = getLPC(sample,fs)
         formants_actual(bar_count,:) = formants_actual(bar_count,:)+formants;
     end
     if(bar_count==4)
@@ -85,6 +88,8 @@ while(i<(length(lcs)))
     end
     i=i+1;
 end
+
+
 formants_actual = formants_actual./4;
 
 score = formants_actual-formants_expected;   

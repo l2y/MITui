@@ -27,7 +27,7 @@ function [rwinvec2resample] = rolVarWin (input,wlen)
     %some jankiness is introduced in the resampling stage @ start
     % of the signal due to its "rapid entrance" 
     % try and filter it out; it looks super high freq.
-    [bb,aa] = butter(4,0.001);
+    [bb,aa] = butter(4,0.003);
     rwinvec2resample = filtfilt(bb,aa,resample(rwinvec2,R,1));
 
 

@@ -8,7 +8,7 @@ freq = fs*(0:round(LN/2))/LN;
 w = hamming(LN);
 y10k = y10k.*w;
 freqn = fsn*(0:round(LN/2))/LN;
-pn = fsn/1000 + 5;
+pn = fsn/1000 + 8;
 [an,gn] = lpc(y10k,pn);
 lspecn = freqz(gn,an,freqn,fsn);
 lspecn = db(abs(lspecn));
@@ -17,7 +17,7 @@ xlabel('Frequency (Hz)');
 ylabel('Magnitude (dB)');
 %xlim([0 5000]);
 [~,locs] = findpeaks(lspecn);
-if freqn(locs(1)) < 500
+if freqn(locs(1)) < 250
     formants = freq(locs(2:4));
 else
     formants = freq(locs(1:3));
