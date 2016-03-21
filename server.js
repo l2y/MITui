@@ -3,11 +3,13 @@ var wav = require('wav');
 var serveStatic = require('serve-static');
 var formidable = require('formidable');
 var serialport = require('serialport');
+var rmdir = require('rimraf');
+var word = "";
 connect().use(serveStatic(__dirname)).listen(8080);
 
 var exec = require('child_process').exec,
-    path = require('path'),
-    fs   = require('fs');
+		path = require('path');
+		fs = require('fs');
 
 // HACK: to make our calls to exec() testable,
 // support using a mock shell instead of a real shell
@@ -29,7 +31,7 @@ function createEnv(params) {
     return env;
 }
 
-var serialportname = 'COM15';
+var serialportname = 'COM3';
 var sp = new serialport.SerialPort(serialportname, {
 	baudRate: 9600,
 	dataBits: 8,
@@ -83,31 +85,15 @@ function syllableCount(word) {
 	}
 }
 
-// scriptFile must be a full path to a shell script
-exports.exec = function (scriptFile, workingDirectory, environment, callback) {
-    var cmd;
-
-    if (!workingDirectory) {
-        callback(new Error('workingDirectory cannot be null'), null, null);
-    }
-
-    if (!fs.existsSync(workingDirectory)) {
-        callback(new Error('workingDirectory path not found - "' + workingDirectory + '"'), null, null);
-    }
-
-    if (scriptFile === null) {
-        callback(new Error('scriptFile cannot be null'), null, null);
-    }
-
-    if (!fs.existsSync(scriptFile)) {
-        callback(new Error('scriptFile file not found - "' + scriptFile + '"'), null, null);
-    }
-}
 
 var http = require('http');
 var previousWord = '';
-recordingCount = 0;
-uploadDir = "C:\\Users\\Cain\\workspace\\MITui\\research";
+var recordingCount = 0;
+var currentWord = "";
+var newSession = true;
+var uploadDir = "C:\\Users\\Cain\\workspace\\MITui\\recordings";
+// var uploadDir = "C:\\Users\\Sarah Kelly\\Documents\\University\\SYDE 461\\Code\\Website\\recordings";
+var version = 0;
 
 //Lets define a port we want to listen to
 const PORT80=80;
@@ -115,24 +101,39 @@ const PORT90=90;
 
 //We need a function which handles requests and send response
 function handleRequest(request, response){
-
+	response.setHeader('Access-Control-Allow-Origin','*'); 
+	console.log('handling get request');
 	
-	if(request.url == '/upload') {	
+	if(request.url == '/upload') {
 		var form = new formidable.IncomingForm();
 		form.uploadDir = uploadDir;
 		form.on('file',function(field,file){
-			fs.rename(file.path, form.uploadDir + "\\" + recordingCount + ".wav");
+			if (newSession) {
+				version = 0;
+				while (fs.existsSync(form.uploadDir + "\\" + currentWord + "\\" + version)) {
+					version++;
+				}
+				fs.mkdir(form.uploadDir + "\\" + currentWord + "\\" + version);
+				recordingCount = 0;
+				newSession = false;
+			}
+			
+			wavFile = uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".wav"
+	  		pitchTier = uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".PitchTier"
+	  		parsedPitch = uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".txt"
 
-			console.log('handling get request');
-	  		// response.setHeader('Access-Control-Allow-Origin','*'); 
-	  		wavFile = uploadDir + "\\" + recordingCount + ".wav"
-	  		pitchTier = uploadDir + "\\" + recordingCount + ".PitchTier"
-	  		parsedPitch = uploadDir + "\\" + recordingCount + ".text"
-			exec('C:\\Users\\Cain\\workspace\\MITui\\pitch_detection_matlab.bat ' 
+			fs.rename(file.path, form.uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".wav");
+			exec('C:\\Users\\Cain\\workspace\\MITui\\praat_pitch_detection.bat ' 
 				+ wavFile + ' ' + pitchTier + ' ' + parsedPitch);
-			recordingCount ++;
+			var spawn = require('child_process').spawn;
+			ls = spawn('cmd.exe',['/c','word_classification_matlab.bat 4 %1']);
+			ls.stdout.on('data',function(data){
+				console.log('stdout: ' + data);
+			});
+			ls.on('exit', function(code){
+				console.log('child process exited with code ' + code);
+			});
 			response.end();
-
 		});
 
 		form.parse(request,function(err,fields,files){
@@ -140,6 +141,16 @@ function handleRequest(request, response){
 				console.error(err.message);
 				return;
 			}
+		});
+	} else if (request.url == '/newSession') {
+		request.on('data',function(data){
+			currentWord = data;
+			newSession = true;
+			recordingCount = 0;
+		});
+	} else if (request.url == '/cont') {
+		request.on('data',function(data){
+			recordingCount++;
 		});
 	}
 	else

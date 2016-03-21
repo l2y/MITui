@@ -19,4 +19,4 @@ for i, v in outputs:
     f = open(i, 'w')
     for entry in v:
         f.write(entry[0] + " " + entry[1] + "\n")
-        
+

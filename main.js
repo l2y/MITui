@@ -60,6 +60,9 @@ window.onload = function(e) {
 
 function startIt(w) {
     word = w;
+    if (word != null && word != "") {
+        newSession(w);
+    }
     $("#word").text(w);
     instructionAudio[CurrentStep].pause();
     instructionAudio[CurrentStep].currentTime = 0;
@@ -118,11 +121,14 @@ function gotBuffers( buffers ) {
 
 function doneEncoding( blob ) {
  	var fd = new FormData();
-	fd.append("upload", blob, "sample.wav");
+    // var data = "";
+    // if (word != null) data = word;
+	fd.append($("#word").text(), blob, "sample.wav");
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.overrideMimeType("multipart/form-data");
   	xmlhttp.open("POST","http://localhost:80/upload");
 	xmlhttp.send(fd);
+    console.log("Send uploads")
 }
 
 function convertToMono( input ) {
@@ -231,6 +237,20 @@ function postPulse(word, CurrentStep){
     xmlhttp.open("POST","http://localhost:80");
 	xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
 	xmlhttp.send(word+','+CurrentStep);
+}
+
+function newSession( word ) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST","http://localhost:80/newSession");
+    xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+    xmlhttp.send(word);
+}
+
+function cont( cont ) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST","http://localhost:80/cont");
+    xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+    xmlhttp.send(cont);
 }
 
 function gotStream(stream) {
@@ -416,6 +436,7 @@ function nextSession() {
     //set the instruction to the next value
     //change audio file
     //tell matlab this will be the next session
+    cont("cont");
     CurrentStep++;
     beginSession();
 }
