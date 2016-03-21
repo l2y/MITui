@@ -1,5 +1,5 @@
 function [score] = classifier_score( filepath, phrase_index )
-%function [formants_actual] = classifier_score( envelopevar, y, fs )
+%function [smptr,rwinvec,envelopevar] = classifier_score( filepath, phrase_index )
 
 %Get expected values
 fileID = fopen('word_index.txt');
@@ -61,11 +61,14 @@ rwinvec = rolVarWin(pitchrs,windowSize);
 
 
 %Compare expected and actual
+
+%Should be fixed
 %TODO @ TOM: FIX PEAKS COUNTER CODE, IT IS VERY VERY FINICKY
 % I did some perf tuning; functions are extremely similar.
 % it is very sensitive to noise & that's not super ok?
 % please try and fix it.
-[pks_in,lcs_in]=findpeaks(envelopevar+rwinvec);
+
+[pks_in,lcs_in]=findpeaks(envelopevar);
 [~,lcs]=peaks_custom(pks_in,lcs_in);
 length(lcs)
 formants_actual = zeros(syllable_count,3);

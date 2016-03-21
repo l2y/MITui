@@ -10,11 +10,11 @@ while(i<(len-1))
     local_max = 1;
     pk = pks_in(i);
     break_flag = 0;
-    while(y>1 && ~break_flag)
+    while(y>0 && ~break_flag)
         if((lcs_in(i)-lcs_in(y))>5512)
             break_flag = 1;
         end
-        if(pks_in(y)>pk)
+        if(pks_in(y)>pk && ~break_flag)
             local_max = 0;
             break_flag = 1;
         end
@@ -26,7 +26,7 @@ while(i<(len-1))
         if((lcs_in(y)-lcs_in(i))>5512)
             break_flag = 1;
         end
-        if(pks_in(y)>pk)
+        if(pks_in(y)>pk && ~break_flag)
             local_max = 0;
             break_flag = 1;
         end
