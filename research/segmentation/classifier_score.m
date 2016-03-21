@@ -61,13 +61,15 @@ rwinvec = rolVarWin(pitchrs,windowSize);
 
 
 %Compare expected and actual
+
+%Should be fixed
 %TODO @ TOM: FIX PEAKS COUNTER CODE, IT IS VERY VERY FINICKY
 % I did some perf tuning; functions are extremely similar.
 % it is very sensitive to noise & that's not super ok?
 % please try and fix it.
 [pks_in,lcs_in]=findpeaks(envelopevar+rwinvec);
-figure()
-plot(envelopevar+rwinvec);
+%figure()
+%plot(envelopevar+rwinvec);
 [~,lcs]=peaks_custom(pks_in,lcs_in);
 length(lcs)
 formants_actual = zeros(syllable_count,3);
