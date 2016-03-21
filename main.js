@@ -270,7 +270,6 @@ function gotStream(stream) {
                                     _audioArray[stepToAudio[CurrentStep]].play();
                                 updateAnalysers();
 
-                                var temp = 100;
                                 var timeout = 16000;
                                 if (CurrentStep == 0) {
                                     timeout = 32000;
@@ -278,19 +277,13 @@ function gotStream(stream) {
                                     timeout = 16000;
                                 }
                                 setTimeout(function() {
-                                    // if (CurrentStep == 3) {
-                                    //     var xmlhttp = new XMLHttpRequest();
-                                    //     xmlhttp.addEventListener("load", reqListener);
-                                    //     xmlhttp.open("GET","http://localhost:90"); 
-                                    //     xmlhttp.send(null);
-                                    // }
                                     endSession();
-                                }, temp);
-                            }, 100);
-                        }, 100);
-                    }, 100);
-                }, 100);
-            }, 100);
+                                }, timeout);
+                            }, 1000);
+                        }, 1000);
+                    }, 1000);
+                }, 1000);
+            }, 1000);
         }, timeCountdownAudio[CurrentStep]);
 				
     }, 3000);
