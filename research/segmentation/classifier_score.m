@@ -79,6 +79,38 @@ while(i<(length(lcs)))
     if(bar_count<=syllable_count)
         section = y(lcs(i):lcs(i+1));
         middle = (lcs(i)+lcs(i+1))/2;
+        
+%         mtxSamples = zeros(fs*0.2, length(-2:2));
+        rg = (1:31);
+        mtxFormants = zeros(length(rg),3);
+        sampleRanges = zeros(length(rg),2);
+        ofsC = ceil(length(rg)/2);
+        
+        for n = rg
+            ofs = (n-ofsC)*fs*0.025;
+            %floor(middle+ofs)
+            % here, sample is a column vector.
+            % let's make the rows different samples.
+            n1 = floor(middle+ofs);
+            n2 = floor(middle+ofs+(fs*0.2));
+
+            sample = y(floor(middle+ofs):floor(middle+ofs+(fs*0.2)));
+            mtxFormants(n,:) = getLPC(sample,fs);
+            sampleRanges(n,:) = [n1 n2]; 
+            
+        end
+        
+        
+        
+        winLoc = (sampleRanges(:,1) + sampleRanges(:,2))/2;
+        
+        figure()
+        scatter(winLoc,mtxFormants(:,1));
+        hold on
+        scatter(winLoc,mtxFormants(:,2));
+        scatter(winLoc,mtxFormants(:,3));
+        
+        
         sample = y(floor(middle-fs*.02):floor(middle+fs*.02));
         formants = getLPC(sample,fs);
         formants_actual(bar_count,:) = formants_actual(bar_count,:)+formants;
