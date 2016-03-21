@@ -1,8 +1,8 @@
-function [score] = classifier_score( filepath, phrase_index, envelopevar,y,fs )
+function [score] = classifier_score( filepath, phrase_index )
 %function [formants_actual] = classifier_score( envelopevar, y, fs )
 
 %Get expected values
-fileID = fopen('word_index.txt')
+fileID = fopen('word_index.txt');
 sizeA = [2 Inf];
 A = fscanf(fileID, '%d %d', sizeA);
 A=A';
@@ -14,40 +14,40 @@ A = fscanf(fileID, '%d %d %d', sizeA);
 formants_expected=A';
 
 %Envelope Segmentation
-% [y,fs] = audioread('I am Good.wav');
-% r = 4;
-% y = decimate(y,r);
-% fs = fs/r;
-% fNy = fs/2;
-% yrect = abs(y);
-% [B,A] = butter(2, 40/fNy);
-% fenvelope = filtfilt(B,A,yrect);
-% fenvelope = normalizesig(fenvelope,0,1);
-% windowSize = (1.5e4 / 4);
-% envelopevar = rolVarWin(fenvelope,windowSize);
+[y,fs] = audioread(filepath);
+r = 4;
+y = decimate(y,r);
+fs = fs/r;
+fNy = fs/2;
+yrect = abs(y);
+[B,A] = butter(2, 40/fNy);
+fenvelope = filtfilt(B,A,yrect);
+fenvelope = normalizesig(fenvelope,0,1);
+windowSize = (1.5e4 / 4);
+envelopevar = rolVarWin(fenvelope,windowSize);
 
 %Pitch Segmentation
-% fileID = fopen('./processedPitch/ParsedPitch I am Good.txt','r');
-% formatSpec = '%f %f';
-% sizeA = [2 Inf];
-% A = fscanf(fileID,formatSpec,sizeA);
-% fclose(fileID);
-% Fs = 44100 / 4;
-% t = A(1,:);
-% pitch = A(2,:);
-% pitch = normalizesig(pitch,0,1);
-% t = [0 t (length(fenvelope))/Fs];
-% pitch = [pitch(1) pitch pitch(length(pitch))];
-% [pitchrs,tr] = resample(pitch,t,Fs,'linear');
-% if abs(length(pitchrs) - length(fenvelope)) > 0
-%     minlen = min(length(envelopevar),length(fenvelope));
-%     pitchrs = pitchrs(1:minlen);
-%     tr = tr(1:minlen);
-%     fenvelope = fenvelope(1:minlen);
-% end
-% smptr = (1:length(tr));
-% windowSize = (1.5e4/4);
-% rwinvec = rolVarWin(pitchrs,windowSize);
+fileID = fopen('./processedPitch/ParsedPitch I am Good.txt','r');
+formatSpec = '%f %f';
+sizeA = [2 Inf];
+A = fscanf(fileID,formatSpec,sizeA);
+fclose(fileID);
+Fs = 44100 / 4;
+t = A(1,:);
+pitch = A(2,:);
+pitch = normalizesig(pitch,0,1);
+t = [0 t (length(fenvelope))/Fs];
+pitch = [pitch(1) pitch pitch(length(pitch))];
+[pitchrs,tr] = resample(pitch,t,Fs,'linear');
+if abs(length(pitchrs) - length(fenvelope)) > 0
+    minlen = min(length(envelopevar),length(fenvelope));
+    pitchrs = pitchrs(1:minlen);
+    tr = tr(1:minlen);
+    fenvelope = fenvelope(1:minlen);
+end
+smptr = (1:length(tr));
+windowSize = (1.5e4/4);
+rwinvec = rolVarWin(pitchrs,windowSize);
 
 
 %plot(smptr,rwinvec);
@@ -83,7 +83,7 @@ while(i<(length(lcs)))
 end
 formants_actual = formants_actual./4;
 
-score_matrix = formants_actual-formants_expected;   
+score = formants_actual-formants_expected;   
 
 end
 
