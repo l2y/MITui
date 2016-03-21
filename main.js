@@ -1,10 +1,12 @@
 //MIT
-var STEPS = ["Listen", "Sing The Phrase", "Sing the Phrase Again", "Listen", "Independent Singing"];
+var PRESTEPS = ["",  "",  "", "Listen", "Listen"];
+var STEPS = ["Listen", "Sing The Phrase", "Sing the Phrase Again", "Independent Singing", "Answer the Question"];
 var INSTRUCTIONS = ["Listen to the humming of the phrase, followed by the singing of the phrase.",
                     "Try and sing the phrase together with the audio.",
                     "Try and sing the phrase together with the audio. Keep singing as the audio fades out.",
                     "First, listen to the audio. After the audio is finished, try and sing the phrase on your own.",
                     "Try and answer the following question, by repeating the phrase you just learnt."];
+
 var AUDIO_FILE = [];
 var CurrentStep = 0;
 
@@ -32,7 +34,16 @@ var word = "";
 //hum+sing, sing, sing fade, sing, question
 var stepToAudio = [ 1, 0, 2, 0, 3] 
 var timeCountdownAudio = [0, 0 ,0, 16000, 4000];
+var icon = ["images/listen-icon.png", "images/speak-icon.png"];
+var iconPreOrder = [0, 1, 1, 0, 0];
+var iconDuringOrder = [0, 1, 1, 1, 1];
+var breatheAnimation = [0, 0, 0, 1, 1];
+var recordingCounter = [32, 16, 16, 16, 16];
 var _audioArray;
+
+//Counter
+var id;
+var counter = 32;
 
 //Instructions
 
@@ -53,33 +64,50 @@ function startIt(w) {
     instructionAudio[CurrentStep].pause();
     instructionAudio[CurrentStep].currentTime = 0;
     
-    $('.circle').addClass('open');
-        $("#start-screen").addClass("fadeOut");
-        $("#start-screen").addClass("animated");
-            $("#start-screen").addClass('hidden');
-            $("#start-screen").removeClass('show');
-            $("#start-next-screen").addClass('hidden');
-            $("#start-next-screen").removeClass('show');
-            $('#opening-screen').addClass('hidden');
-            $('#opening-screen').removeClass('show');
+    $('#icon-instruction').addClass('show');
+    $('#icon-instruction').removeClass('hidden');
+    $("#start-screen").addClass("fadeOut");
+    $("#start-screen").addClass("animated");
+    $("#start-screen").addClass('hidden');
+    $("#start-screen").removeClass('show');
+    $("#start-next-screen").addClass('hidden');
+    $("#start-next-screen").removeClass('show');
+    $('#opening-screen').addClass('hidden');
+    $('#opening-screen').removeClass('show');
+
+    $('#action-screen').addClass('show');
+    $('#action-screen').removeClass('hidden');
+
+    $('#action-screen').addClass('fadeIn');
+    $('#action-screen').addClass('animated');  
+
+    $("#countdown-screen").addClass("show");
+    $("#countdown-screen").removeClass("hidden"); 
     
-            $('#action-screen').addClass('show');
-            $('#action-screen').removeClass('hidden');
+    toggleImage(icon[iconPreOrder[CurrentStep]]);
+    toggleBreathe(CurrentStep);
     
-            $('#action-screen').addClass('fadeIn');
-            $('#action-screen').addClass('animated');  
-    
-            $("#countdown-screen").addClass("show");
-            $("#countdown-screen").removeClass("hidden"); 
-            setTimeout(function() {
-                setTimeout(function() {
-                    initAudio();
-                    $('#action-screen').removeClass('fadeIn');
-                    $('#action-screen').removeClass('animated');
-                    $('#start-screen').removeClass('fadeOut');
-                    $('#start-screen').removeClass('animated');
-                }, 1000);
-            }, 1000);
+    setTimeout(function() {
+        setTimeout(function() {
+            initAudio();
+            $('#action-screen').removeClass('fadeIn');
+            $('#action-screen').removeClass('animated');
+            $('#start-screen').removeClass('fadeOut');
+            $('#start-screen').removeClass('animated');
+        }, 1000);
+    }, 1000);
+}
+
+function toggleImage(image) {
+    document.getElementById("icon-instruction-image").src = image;   
+}
+
+function toggleBreathe(step) {
+    if (breatheAnimation[step] == 1) {
+        $("#icon-instruction-image").addClass("playBreathe");
+    } else {
+        $("#icon-instruction-image").removeClass("playBreathe");
+    }
 }
 
 /** RECORDING **/
@@ -120,6 +148,27 @@ function updateAnalysers(time) {
         canvasHeight = canvas.height;
         analyserContext = canvas.getContext('2d');
         analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
+        
+        var spot = 0;
+        //draw starting points for repeats
+        while(spot < 1400) {
+            var SPACING = 1;
+            var BAR_WIDTH = 2;
+
+            analyserContext.fillStyle = '#41A8C1';
+            analyserContext.lineCap = 'butt';
+
+            var magnitude = 50;
+
+            var xpos = spot;
+            var ypos = 0;
+            var width = BAR_WIDTH;
+            var height = magnitude*2;
+            analyserContext.fillRect(((BAR_WIDTH * spot) + SPACING * spot), canvasHeight, BAR_WIDTH, -1 * magnitude); 
+            spot+=100;
+
+            console.log(((BAR_WIDTH * spot) + SPACING * spot) + '|' + canvasHeight + '|' + BAR_WIDTH + '|' + magnitude);
+        }
     }
     
     if (timer > 0 && starting == 0) {
@@ -193,6 +242,7 @@ function gotStream(stream) {
     }
     setTimeout(function(){
     // Create an AudioNode from the stream.
+        if (realAudioInput == null)
         realAudioInput = audioContext.createMediaStreamSource(stream);
         audioInput = realAudioInput;
         audioInput.connect(inputPoint);
@@ -200,8 +250,9 @@ function gotStream(stream) {
         analyserNode = audioContext.createAnalyser();
         analyserNode.fftSize = 2048;
         inputPoint.connect( analyserNode );
-
-        audioRecorder = new Recorder( inputPoint );
+        
+        if (audioRecorder == null)
+            audioRecorder = new Recorder( inputPoint );
 
         zeroGain = audioContext.createGain();
         zeroGain.gain.value = 0.0;
@@ -217,6 +268,7 @@ function gotStream(stream) {
         setTimeout(function() {
             
             setTimeout(function() {
+                $('#countdown-text').empty();
                 $("#countdown").empty();
                 $("#countdown").html(3);
 
@@ -231,11 +283,16 @@ function gotStream(stream) {
                         setTimeout(function() {
                             $("#countdown").empty();
                             $("#countdown").html('GO');
-
+                            
                             setTimeout(function() {
+                                startTimer();
                                 audioRecorder.record(); 
                                 $("#countdown-screen").addClass("hidden");
                                 $("#countdown-screen").removeClass("show"); 
+                                $("#icon-instruction-image").addClass("playBreathe");
+
+                                toggleImage(icon[iconDuringOrder[CurrentStep]]);
+                                
 //                                _audioArray[stepToAudio[CurrentStep]].play();
                                 if(word == null){
                                     postPulse('Next Step', CurrentStep);
@@ -244,11 +301,11 @@ function gotStream(stream) {
                                 }
 
                                 $("#countdown").empty();
-                                $("#countdown").html('.');
 
                                 if (CurrentStep != 4 && CurrentStep != 3)
                                     _audioArray[stepToAudio[CurrentStep]].play();
-                                updateAnalysers();
+                                if (CurrentStep != 0)
+                                    updateAnalysers();
 
                                 var timeout = 16000;
                                 if (CurrentStep == 0) {
@@ -257,12 +314,7 @@ function gotStream(stream) {
                                     timeout = 16000;
                                 }
                                 setTimeout(function() {
-                                    // if (CurrentStep == 3) {
-                                    //     var xmlhttp = new XMLHttpRequest();
-                                    //     xmlhttp.addEventListener("load", reqListener);
-                                    //     xmlhttp.open("GET","http://localhost:90"); 
-                                    //     xmlhttp.send(null);
-                                    // }
+                                    $("#icon-instruction-image").removeClass("playBreathe");
                                     endSession();
                                 }, timeout);
                             }, 1000);
@@ -376,6 +428,12 @@ function sameSession() {
 }
 
 function beginSession() {
+    $('#icon-instruction').addClass('hidden');
+    $('#icon-instruction').removeClass('show');
+    
+    document.getElementById("counter").innerHTML = recordingCounter[CurrentStep];
+    counter = recordingCounter[CurrentStep];
+    
     //next screen
     if (CurrentStep < INSTRUCTIONS.length) {
         // Play instructions
@@ -385,6 +443,7 @@ function beginSession() {
         $("#start-instruction").html(INSTRUCTIONS[CurrentStep]);
         $("#action-instruction").empty();
         $("#action-instruction").html(STEPS[CurrentStep]);
+        $("#countdown-text").html(PRESTEPS[CurrentStep]);
         $("#action-next-instruction").empty();
         $("#action-next-instruction").html(INSTRUCTIONS[CurrentStep]);
 
@@ -421,6 +480,18 @@ function beginSession() {
         $("#action-screen").addClass("hidden");
         $("#action-screen").removeClass("show");  
     }
+}
+
+function startTimer() {
+    id = setInterval(function() {
+        counter--;
+        if(counter < 0) {
+            document.getElementById("counter").innerHTML = 0 ;
+            clearInterval(id);
+        } else {
+            document.getElementById("counter").innerHTML = counter.toString();
+        }
+    }, 1000);
 }
 
 function setStatistic(id, value) {
