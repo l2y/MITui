@@ -176,11 +176,12 @@ function reqListener () {
     console.log(averageFreqPerc);
 }
 
-function postPulse(word){
-	 var xmlhttp = new XMLHttpRequest();
-    	 xmlhttp.open("POST","http://localhost:80");
+function postPulse(word, CurrentStep){
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST","http://localhost:80");
 	xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
-	xmlhttp.send(word);
+	xmlhttp.send(word+','+CurrentStep);
 }
 
 function gotStream(stream) {
@@ -211,7 +212,6 @@ function gotStream(stream) {
         
         _audioArray = setAudio();
         
-       	postPulse();
         if (CurrentStep == 4 || CurrentStep == 3)
             _audioArray[stepToAudio[CurrentStep]].play();
         setTimeout(function() {
@@ -238,9 +238,9 @@ function gotStream(stream) {
                                 $("#countdown-screen").removeClass("show"); 
 //                                _audioArray[stepToAudio[CurrentStep]].play();
                                 if(word == null){
-                                    postPulse('Next Step');
+                                    postPulse('Next Step', CurrentStep);
                                 } else {
-                                    postPulse(word);
+                                    postPulse(word, CurrentStep);
                                 }
 
                                 $("#countdown").empty();
