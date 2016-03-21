@@ -29,7 +29,7 @@ function createEnv(params) {
     return env;
 }
 
-var serialportname = 'COM4';
+var serialportname = 'COM15';
 var sp = new serialport.SerialPort(serialportname, {
 	baudRate: 9600,
 	dataBits: 8,
@@ -43,18 +43,22 @@ function pulse() {
 	sp.write("HELLO\r\n");
 }
 
-function pulseStream(barPosition,beatPosition,Syllables) {
-	if(barPosition<=4) {
+function pulseStream(barPosition,beatPosition,Syllables, CurrentStep) {
+	totalBar = 4;
+	if (CurrentStep == 0) {
+		totalBar = 8;
+	}
+	if(barPosition<=totalBar) {
 		if(beatPosition <= Syllables ) {
 			pulse();
 		}
 		if(beatPosition<4) {
 			setTimeout(function(){
-				pulseStream(barPosition,beatPosition+1,Syllables);
+				pulseStream(barPosition,beatPosition+1,Syllables, CurrentStep);
 			},1000);
 		} else {
 			setTimeout(function(){
-				pulseStream(barPosition+1,1,Syllables);
+				pulseStream(barPosition+1,1,Syllables, CurrentStep);
 			},1000);
 		}
 	}
@@ -103,6 +107,7 @@ exports.exec = function (scriptFile, workingDirectory, environment, callback) {
 var http = require('http');
 var previousWord = '';
 recordingCount = 0;
+uploadDir = "C:\\Users\\Cain\\workspace\\MITui\\research";
 
 //Lets define a port we want to listen to
 const PORT80=80;
@@ -110,51 +115,60 @@ const PORT90=90;
 
 //We need a function which handles requests and send response
 function handleRequest(request, response){
-	if(request.method == 'GET'){	
-		console.log('handling get request');
-  		response.setHeader('Access-Control-Allow-Origin','*'); 
-		exec('C:\\Users\\Cain\\workspace\\MITui\\pitch_detection_matlab.bat');
-		response.end();
+
+	
+	if(request.url == '/upload') {	
+		var form = new formidable.IncomingForm();
+		form.uploadDir = uploadDir;
+		form.on('file',function(field,file){
+			fs.rename(file.path, form.uploadDir + "\\" + recordingCount + ".wav");
+
+			console.log('handling get request');
+	  		// response.setHeader('Access-Control-Allow-Origin','*'); 
+	  		wavFile = uploadDir + "\\" + recordingCount + ".wav"
+	  		pitchTier = uploadDir + "\\" + recordingCount + ".PitchTier"
+	  		parsedPitch = uploadDir + "\\" + recordingCount + ".text"
+			exec('C:\\Users\\Cain\\workspace\\MITui\\pitch_detection_matlab.bat ' 
+				+ wavFile + ' ' + pitchTier + ' ' + parsedPitch);
+			recordingCount ++;
+			response.end();
+
+		});
+
+		form.parse(request,function(err,fields,files){
+			if(err){
+				console.error(err.message);
+				return;
+			}
+		});
 	}
 	else
 	{
-		if(request.url == '/upload'){	
-			var form = new formidable.IncomingForm();
-			form.uploadDir = "/Users/Sarah Kelly/Desktop/classifier";
-			form.on('file',function(field,file){
-				fs.rename(file.path, form.uploadDir + "/" + recordingCount + ".wav");
-				recordingCount ++;
-			});	
-			form.parse(request,function(err,fields,files){
-				if(err){
-					console.error(err.message);
-					return;
-				}
-			});
-		}
-		else
-		{
-			word = '';
-			request.on('data',function(data){
-				word+=data;
-				if(word=='Next Step'){
-					//setTimeout(function() {
-						pulseStream(1,1,syllableCount(previousWord));
-					//},500);
-				} else {
-					//setTimeout(function() {
-						previousWord = word;
-						pulseStream(1,1,syllableCount(word));
-					//},300);
-				}
-			});
-		}
-		response.end();
+		word = '';
+		request.on('data',function(data){
+			word+=data;
+			CurrentStep = word.split(',')[1]
+			word = word.split(',')[0]
+			console.log(word)
+			console.log(CurrentStep)
+			if(word=='Next Step'){
+				//setTimeout(function() {
+					pulseStream(1,1,syllableCount(previousWord), CurrentStep);
+				//},500);
+			} else {
+				//setTimeout(function() {
+					previousWord = word;
+					pulseStream(1,1,syllableCount(word), CurrentStep);
+				//},300);
+			}
+		});
 	}
+	response.end();
+	
 }
 
 function handleResult(request, response){
-/*
+
   	response.setHeader('Access-Control-Allow-Origin','*');
 	var fs = require('fs');
     do {                                           
@@ -170,7 +184,7 @@ function handleResult(request, response){
 	  	response.write(data);
 	  	response.end();
 	});
-*/
+
 response.end();
 }
 

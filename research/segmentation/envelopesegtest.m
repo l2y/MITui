@@ -7,7 +7,6 @@ r = 4;
 y = decimate(y,r);
 fs = fs/r;
 
-
 % noise-robustness: we should cut off frequencies
 % above the nyquist frequencies before rectifying.
 % edit: decimate has a built in FIR filter
