@@ -2,7 +2,6 @@ clear all
 close all
 
 [y,fs] = audioread('Hello-short.wav');
-y = y(1:fs*2.5);
 
 NS = length(y);
 TS = NS/fs;
@@ -58,16 +57,37 @@ title('Narrowband Spectrogram');
 N = 512;
 w = hamming(N);
 o = N-16;
-figure(2);
+figure(99);
 %spectrogram(y,w,o,N,fs,
-[s,f,t] = spectrogram(y,w,0,N,fs);
+[s,f,t] = spectrogram(y,w,o,N,fs);
 imagesc(t,f,db(abs(s))+1);
 colormap(flipud(gray));
 title('Wideband Spectrogram, Hamming window manual plot');
 axis xy;
 xlabel('time(sec)');
 ylabel('freq(Hz)');
-ylim([0 10000]);
+ylim([0 5000]);
+
+%% Narrowband Spectrogram - manual plot
+
+N = 1024;
+w = hamming(N);
+o = N-16;
+figure(10);
+[s,f,t] = spectrogram(y,w,o,N,fs);
+clims = [-40 25];
+imagesc(t,f,db(abs(s)),clims);
+colorbar
+
+colormap(flipud(gray));
+title('Narrowband Spectrogram, Hamming window manual plot');
+axis xy;
+xlabel('time(sec)');
+ylabel('freq(Hz)');
+ylim([0 5000]);
+
+
+
 
 
 %% Wideband Spectrogram - autoplot
