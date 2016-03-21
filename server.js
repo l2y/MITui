@@ -125,14 +125,16 @@ function handleRequest(request, response){
 			fs.rename(file.path, form.uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".wav");
 			// exec('C:\\Users\\Cain\\workspace\\MITui\\pitch_detection_matlab.bat ' 
 			// 	+ wavFile + ' ' + pitchTier + ' ' + parsedPitch);
-			var spawn = require('child_process').spawn;
-			ls = spawn('cmd.exe',['/c','word_classification_matlab.bat 4 %1']);
-			ls.stdout.on('data',function(data){
-				console.log('stdout: ' + data);
-			});
-			ls.on('exit', function(code){
-				console.log('child process exited with code ' + code);
-			});
+			if(recordingCount==1 && currentWord=='I Am Good'){
+				var spawn = require('child_process').spawn;
+				ls = spawn('cmd.exe',['/c','word_classification_matlab.bat 4 %1']);
+				ls.stdout.on('data',function(data){
+					console.log('stdout: ' + data);
+				});
+				ls.on('exit', function(code){
+					console.log('child process exited with code ' + code);
+				});
+			}
 			response.end();
 		});
 
