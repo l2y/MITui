@@ -12,9 +12,9 @@ pn = fsn/1000 + 5;
 [an,gn] = lpc(y10k,pn);
 lspecn = freqz(gn,an,freqn,fsn);
 lspecn = db(abs(lspecn));
-plot(freqn,lspecn);
-xlabel('Frequency (Hz)');
-ylabel('Magnitude (dB)');
+%plot(freqn,lspecn);
+%xlabel('Frequency (Hz)');
+%ylabel('Magnitude (dB)');
 %xlim([0 5000]);
 [~,locs] = findpeaks(lspecn); 
 if freqn(locs(1)) < 225

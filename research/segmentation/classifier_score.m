@@ -1,4 +1,4 @@
-function [score,formants_actual] = classifier_score( filepath, phrase_index )
+function [score,formants_actual] = classifier_score( phrase_index )
 %function [formants_actual] = classifier_score( envelopevar, y, fs )
 
 %Get expected values
@@ -14,7 +14,7 @@ A = fscanf(fileID, '%d %d %d', sizeA);
 formants_expected=A';
 
 %Envelope Segmentation
-[y,fs] = audioread(filepath);
+[y,fs] = audioread('I am Good.wav');
 r = 4;
 y = decimate(y,r);
 fs = fs/r;
@@ -27,7 +27,13 @@ windowSize = (1.5e4 / 4);
 envelopevar = rolVarWin(fenvelope,windowSize);
 
 %Pitch Segmentation
+
+%Using Pre-recorded
 fileID = fopen('./processedPitch/ParsedPitch I am Good.txt','r');
+
+%Using Live
+%
+
 formatSpec = '%f %f';
 sizeA = [2 Inf];
 A = fscanf(fileID,formatSpec,sizeA);
@@ -102,13 +108,13 @@ while(i<(length(lcs)))
         
         
         
-        winLoc = (sampleRanges(:,1) + sampleRanges(:,2))/2;
-        
-        figure()
-        scatter(winLoc,mtxFormants(:,1));
-        hold on
-        scatter(winLoc,mtxFormants(:,2));
-        scatter(winLoc,mtxFormants(:,3));
+%         winLoc = (sampleRanges(:,1) + sampleRanges(:,2))/2;
+%         
+%         figure()
+%         scatter(winLoc,mtxFormants(:,1));
+%         hold on
+%         scatter(winLoc,mtxFormants(:,2));
+%         scatter(winLoc,mtxFormants(:,3));
         
         
         sample = y(floor(middle-fs*.02):floor(middle+fs*.02));
@@ -127,6 +133,10 @@ end
 formants_actual = formants_actual./4;
 
 score = formants_actual-formants_expected;   
+
+fid = fopen('results.txt','w');
+fprintf(fid,'%f,%f,%f\r\n',score.');
+fid = fclose(fid);
 
 end
 
