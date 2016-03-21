@@ -79,8 +79,8 @@ while(i<(length(lcs)))
     if(bar_count<=syllable_count)
         section = y(lcs(i):lcs(i+1));
         middle = (lcs(i)+lcs(i+1))/2;
-        sample = y(middle-fs*.02:middle+fs*.02);
-        formants = getLPC(sample,fs)
+        sample = y(floor(middle-fs*.02):floor(middle+fs*.02));
+        formants = getLPC(sample,fs);
         formants_actual(bar_count,:) = formants_actual(bar_count,:)+formants;
     end
     if(bar_count==4)

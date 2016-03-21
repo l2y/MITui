@@ -32,7 +32,7 @@ while(i<(len-1))
         end
         y = y+1;
     end
-    if(local_max)
+    if(local_max && pks_in(i) > 0.005)
         pks_out = [pks_out pks_in(i)];
         lcs_out = [lcs_out lcs_in(i)];
     end
