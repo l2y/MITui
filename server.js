@@ -7,6 +7,10 @@ var rmdir = require('rimraf');
 var word = "";
 connect().use(serveStatic(__dirname)).listen(8080);
 
+var exec = require('child_process').exec,
+		path = require('path');
+		fs = require('fs');
+
 // HACK: to make our calls to exec() testable,
 // support using a mock shell instead of a real shell
 var shell = process.env.SHELL || 'sh';
@@ -121,9 +125,8 @@ function handleRequest(request, response){
 			fs.rename(file.path, form.uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".wav");
 			// exec('C:\\Users\\Cain\\workspace\\MITui\\pitch_detection_matlab.bat ' 
 			// 	+ wavFile + ' ' + pitchTier + ' ' + parsedPitch);
-			console.log("beginning of file execution");
 			var spawn = require('child_process').spawn;
-			ls = spawn('cmd.exe',['/c','word_classification_matlab.bat 7 %1']);
+			ls = spawn('cmd.exe',['/c','word_classification_matlab.bat 4 %1']);
 			ls.stdout.on('data',function(data){
 				console.log('stdout: ' + data);
 			});
