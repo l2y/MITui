@@ -53,7 +53,9 @@ pitch = [pitch(1) pitch pitch(length(pitch))];
 
 %upitches: mean pitch values (hi-lo)
 %pitchrs: pitch signal
-
+fid = fopen('pitches.txt','w');
+fprintf(fid,'%f,%f\r\n',upitches');
+fid = fclose(fid);
 
 %plot(smptr,rwinvec);
 %hold on
