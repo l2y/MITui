@@ -93,12 +93,12 @@ while(i<(length(lcs)))
         ofsC = ceil(length(rg)/2);
         
         for n = rg
-            ofs = (n-ofsC)*fs*0.015;
+            ofs = (n-ofsC)*fs*0.02;
             %floor(middle+ofs)
             % here, sample is a column vector.
             % let's make the rows different samples.
             n1 = floor(middle+ofs);
-            n2 = floor(middle+ofs+(fs*0.015));
+            n2 = floor(middle+ofs+(fs*0.02));
 
             sample = y(n1:n2);
             mtxFormants(n,:) = getLPC(sample,fs,4);

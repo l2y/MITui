@@ -172,8 +172,6 @@ function updateAnalysers(time) {
             var height = magnitude*2;
             analyserContext.fillRect(((BAR_WIDTH * spot) + SPACING * spot), canvasHeight, BAR_WIDTH, -1 * magnitude); 
             spot+=100;
-
-            console.log(((BAR_WIDTH * spot) + SPACING * spot) + '|' + canvasHeight + '|' + BAR_WIDTH + '|' + magnitude);
         }
     }
     
@@ -488,9 +486,14 @@ function beginSession() {
         }
     //stats/restart screen
     } else {
-
-//        $("#stats-screen").addClass("show");
-//        $("#stats-screen").removeClass("hidden");
+        var scores = getScores();
+        
+        $('#timing-score').innerHTML = "Timing Score:" + scores[0];
+        $('#pitch-score').innerHTML = "Pitch Score:" + scores[1];
+        $('#classification-score').innerHTML = "Classification Score:" + scores[2];
+        
+        document.getElementById("timing-pitch-graph-image").src = "images/button-hover.png";  
+        document.getElementById("classification-graph-image").src = "images/button-hover.png";  
         
         $("#restart-screen").addClass("show");
         $("#restart-screen").removeClass("hidden");
@@ -499,8 +502,28 @@ function beginSession() {
         $("#continue-screen").removeClass("show");  
         
         $("#action-screen").addClass("hidden");
-        $("#action-screen").removeClass("show");  
+        $("#action-screen").removeClass("show");
     }
+}
+
+function getScores() {
+    var rawFile = new XMLHttpRequest();
+    var allText;
+    //GET FILE LOCATION
+    rawFile.open("GET", "results/Scores.txt", false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                allText = rawFile.responseText;
+            }
+        }
+    }
+    rawFile.send(null);
+    
+    return allText.split(" ");
 }
 
 function startTimer() {
