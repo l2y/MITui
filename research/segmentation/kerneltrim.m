@@ -1,5 +1,7 @@
 function [pitch,upitches] = kerneltrim(pitch)
      % estimate kernel
+    
+    pitch = normalizesig(pitch,0,1);
     pd2 = fitdist(pitch','Kernel');
     xp = (0:0.001:1);   % 1/1000th of the pitch range we normalized
     ypd2 = pdf(pd2,xp);
