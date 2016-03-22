@@ -127,7 +127,7 @@ function handleRequest(request, response){
 				//+ wavFile + ' ' + pitchTier + ' ' + parsedPitch);
 			if(recordingCount==1 && currentWord=='I Am Good'){
 				var spawn = require('child_process').spawn;
-				ls = spawn('cmd.exe',['/c','word_classification_matlab.bat 4 %1']);
+				ls = spawn('cmd.exe',['/c','word_classification_matlab.bat 4 ' + parsedPitch]);
 				ls.stdout.on('data',function(data){
 					console.log('stdout: ' + data);
 				});
