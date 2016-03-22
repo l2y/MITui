@@ -1,5 +1,5 @@
 %fs here is desired FS
-function[rwinvec] = pitchseg(ypitch,t,fs,L,winSz)
+function[rwinvec,upitches,pitchrs] = pitchseg(ypitch,t,fs,L,winSz)
     
     % do kernel estimation before  the resampling process
     [pitch,upitches] = kerneltrim(ypitch);
