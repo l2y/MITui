@@ -31,7 +31,7 @@ function createEnv(params) {
     return env;
 }
 
-var serialportname = 'COM4';
+var serialportname = 'COM3';
 var sp = new serialport.SerialPort(serialportname, {
 	baudRate: 9600,
 	dataBits: 8,
@@ -91,8 +91,8 @@ var previousWord = '';
 var recordingCount = 0;
 var currentWord = "";
 var newSession = true;
-//var uploadDir = "C:\\Users\\Cain\\workspace\\MITui\\recordings";
-var uploadDir = "C:\\Users\\Sarah Kelly\\Documents\\University\\SYDE 461\\Code\\Website\\recordings";
+var uploadDir = "C:\\Users\\Cain\\workspace\\MITui\\recordings";
+// var uploadDir = "C:\\Users\\Sarah Kelly\\Documents\\University\\SYDE 461\\Code\\Website\\recordings";
 var version = 0;
 
 //Lets define a port we want to listen to
@@ -117,12 +117,13 @@ function handleRequest(request, response){
 				recordingCount = 0;
 				newSession = false;
 			}
-
+			
 			wavFile = uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".wav"
 	  		pitchTier = uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".PitchTier"
-	  		parsedPitch = uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".text"
+	  		parsedPitch = uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".txt"
 
 			fs.rename(file.path, form.uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".wav");
+<<<<<<< HEAD
 			// exec('C:\\Users\\Cain\\workspace\\MITui\\pitch_detection_matlab.bat ' 
 			// 	+ wavFile + ' ' + pitchTier + ' ' + parsedPitch);
 			if(recordingCount==1 && currentWord=='I Am Good'){
@@ -135,6 +136,18 @@ function handleRequest(request, response){
 					console.log('child process exited with code ' + code);
 				});
 			}
+=======
+			exec('C:\\Users\\Cain\\workspace\\MITui\\praat_pitch_detection.bat ' 
+				+ wavFile + ' ' + pitchTier + ' ' + parsedPitch);
+			var spawn = require('child_process').spawn;
+			ls = spawn('cmd.exe',['/c','word_classification_matlab.bat 4 %1']);
+			ls.stdout.on('data',function(data){
+				console.log('stdout: ' + data);
+			});
+			ls.on('exit', function(code){
+				console.log('child process exited with code ' + code);
+			});
+>>>>>>> origin/master
 			response.end();
 		});
 

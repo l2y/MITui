@@ -24,18 +24,6 @@
 <div id="main-screen" ng-app="myApp" ng-controller="myCtrl">
     <div id="start-screen" class="show">
         <div id="start-instruction" class="above-transparent stroke">Instructions will go here!</div>
-<!--        <img id="start" class="above-transparent" src="images/start.png" alt="START" onclick="startIt()">-->
-        
-<!--        water/hello/how are you/i am good/i love you/ice cream/thank you-->
-<!--
-        <img id="start" class="above-transparent" src="images/button.png" alt="START" onclick="startIt()">
-        <img id="start" class="above-transparent" src="images/button.png" alt="START" onclick="startIt()">
-        <img id="start" class="above-transparent" src="images/button.png" alt="START" onclick="startIt()">
-        <img id="start" class="above-transparent" src="images/button.png" alt="START" onclick="startIt()">
-        <img id="start" class="above-transparent" src="images/button.png" alt="START" onclick="startIt()">
-        <img id="start" class="above-transparent" src="images/button.png" alt="START" onclick="startIt()">
-        <img id="start" class="above-transparent" src="images/button.png" alt="START" onclick="startIt()">
--->
         <div class="all-buttons">
             <div class="button above-transparent" alt="START" onclick="startIt('Water')">Water</div>
             <div class="button above-transparent" alt="START" onclick="startIt('Hello')">Hello</div>
@@ -55,8 +43,12 @@
     </div>
     
     <div id="opening-screen" class="show" style="overflow:hidden">
-            <div class="blue"></div>
-        </div>
+        <div class="blue"></div>
+    </div>
+    
+    <div id="icon-instruction" class="hidden above-transparent">
+        <img id="icon-instruction-image" class="image" class="header" alt="ACTION IMAGE">
+    </div>
     
     <div id="action-screen" class="hidden">
 
@@ -64,16 +56,13 @@
 <!--            <img id="word" class="header" src="images/water.jpg" alt="WATER">-->
             <div id="word" class="header-word stroke" alt="WORD">Fill in Phrase</div>
             <div id="action-instruction" class="header">INSTRUCTION</div>
-<!--            <img class="image" class="header" src="images/water_image.jpg" alt="WATER IMAGE">-->
+            <div id="counter" class="header">32</div>
             <!--    a blinking light to represent the physical feedback-->
         </div>
         
         <!--    the visual representation of the person's created waveform - this will be dynamic..-->
         <canvas id="analyser" width="1400px" height="100">
         </canvas>
-        
-        <!--    the visual representation of the waveform - constant except for when in moton ..-->
-        <div id="example-analyser">
             
         </div>
         
@@ -84,7 +73,7 @@
     <div id="continue-screen" class="hidden">
         <div id="continue-button">
             <div>
-            <div id="left" class="button-red above-transparent" alt="RETRY" onclick="sameSession()">Retry</div>
+            <div id="left" class="button-red above-transparent" alt="RETRY" onclick="sameSession()">Let's Try Again</div>
             <div id="right" class="button-next above-transparent" alt="NEXT" onclick="nextSession()">Next</div>
                 </div>
         </div>
@@ -94,8 +83,8 @@
     
     <div id="countdown-screen" class="hidden">
         <div id="countdown-area" class="above-transparent">
+            <div id="countdown-text" class="stroke above-transparent"></div>
             <div id="countdown" class="stroke">
-            .
             </div>
         </div>
 

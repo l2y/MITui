@@ -89,6 +89,7 @@ body {
 }
 #action-instruction {
     padding-left:200px;
+    font-size:200%;
 }
 #action-next-instruction {
     text-align: center;
@@ -280,3 +281,58 @@ div {
     text-align: center;   
 }
 
+#icon-instruction {
+    position:absolute;
+    right:30px;
+    bottom:30px;
+    z-index: 103;
+}
+
+@keyframes breathe {
+  10%, 90% {
+    transform: scale(1.05, 1.05);
+  }
+  
+  20%, 80% {
+    transform: scale(0.9, 0.9);
+  }
+
+  30%, 50%, 70% {
+    transform: scale(1.1, 1.1);
+  }
+
+  40%, 60% {
+    transform: scale(0.95, 0.95);
+  }
+}
+
+.playBreathe {
+    -moz-animation-name: breathe;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: ease-in;
+    -moz-animation-duration: 5s;
+
+    -webkit-animation-name: breathe;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in;
+    -webkit-animation-duration: 5s;
+
+    animation-name: breathe;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in;
+    animation-duration: 5s;
+}
+
+#counter {
+    margin-left:150px; 
+    font-size: 250%;
+    background-color:#41A8C1;
+    border-radius:5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    color:white;
+}
+
+#countdown-text {
+    font-size:300%;
+}
