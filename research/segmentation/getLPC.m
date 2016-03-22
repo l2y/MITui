@@ -1,17 +1,20 @@
 function [ formants ] = getLPC(y,fs, order)
 
-%r = 4;                      % decimation factor
-%y10k = decimate(y,r);
-y10k = y;
-fsn = fs;                 % 11025 Hz
-LN = length(y10k);
-freq = fs*(0:round(LN/2))/LN;
-w = hamming(LN);
-y10k = y10k.*w;
-freqn = fsn*(0:round(LN/2))/LN;
-pn = fsn/1000 + order;
-[an,gn] = lpc(y10k,pn);
-lspecn = freqz(gn,an,freqn,fsn);
+w = hamming(length(y));
+yw = y.*w;
+
+formants = LPCInner(yw,fs,order);
+
+
+end
+
+function [formants] = LPCInner(y,fs,order)
+
+LN = length(y);
+freqn = fs*(0:round(LN/2))/LN;
+pn = fs/1000 + order;
+[an,gn] = lpc(y,pn);
+lspecn = freqz(gn,an,freqn,fs);
 lspecn = db(abs(lspecn));
 %figure()
 %plot(freqn,lspecn);
@@ -21,16 +24,13 @@ lspecn = db(abs(lspecn));
 [~,locs] = findpeaks(lspecn); 
 if length(locs) > 3
     if freqn(locs(1)) < 200
-        formants = freq(locs(2:4));
+        formants = freqn(locs(2:4));
     else
-        formants = freq(locs(1:3));
+        formants = freqn(locs(1:3));
     end
-
-    
-    
 else    
     if length(locs) < 3 && order < 12
-        formants = getLPC(y,fs, order+2);
+        formants = LPCInner(y,fs, order+2);
     else 
         formants = [0 0 0];
     end
@@ -38,7 +38,7 @@ end
 
 if formants(1) > 1000
     if order < 12
-        formants = getLPC(y,fs, order+2);
+        formants = LPCInner(y,fs, order+2);
     end
 end
 
