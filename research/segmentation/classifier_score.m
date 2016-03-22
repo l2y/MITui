@@ -117,10 +117,20 @@ while(i<(length(lcs)))
 %         scatter(winLoc,mtxFormants(:,3));
         %sample = y(floor(middle-fs*.01):floor(middle+fs*.01));
         %formants = getLPC(sample,fs,4);
+        
+        %remove zero rows from the returned formants
+        mtxFormants( all(~mtxFormants,2), : ) = [];
+        
         fMedian = [median(mtxFormants(:,1)) ...
             median(mtxFormants(:,2)) median(mtxFormants(:,3))];
         fMean = [median(mtxFormants(:,1)) ...
             median(mtxFormants(:,2)) median(mtxFormants(:,3))];
+        
+        z = zeros([1 1]);
+        
+        % Remove zero rows
+        
+        
         
         fAvgavg = (fMean + fMedian) / 2;
         
