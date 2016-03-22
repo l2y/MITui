@@ -14,7 +14,8 @@ A = fscanf(fileID, '%d %d %d', sizeA);
 formants_expected=A';
 
 %Envelope Segmentation
-[y,fs] = audioread('I am Good.wav');
+%[y,fs] = audioread('I am Good.wav');
+[y,fs] = audioread('C:/Users/Sarah Kelly/Documents/University/SYDE 461/Code/Website/recordings/I Am Good/0/1.wav');
 r = 4;
 y = decimate(y,r);
 fs = fs/r;
@@ -92,12 +93,12 @@ while(i<(length(lcs)))
         ofsC = ceil(length(rg)/2);
         
         for n = rg
-            ofs = (n-ofsC)*fs*0.015;
+            ofs = (n-ofsC)*fs*0.02;
             %floor(middle+ofs)
             % here, sample is a column vector.
             % let's make the rows different samples.
             n1 = floor(middle+ofs);
-            n2 = floor(middle+ofs+(fs*0.015));
+            n2 = floor(middle+ofs+(fs*0.02));
 
             sample = y(n1:n2);
             mtxFormants(n,:) = getLPC(sample,fs,4);
