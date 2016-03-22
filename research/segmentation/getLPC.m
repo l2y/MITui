@@ -26,8 +26,14 @@ if length(locs) > 3
         formants = freq(locs(1:3));
     end
 
-else
-    formants = freq(locs(1:3));
+    
+    
+else    
+    if length(locs) < 3 && order < 12
+        formants = getLPC(y,fs, order+2);
+    else 
+        formants = [0 0 0];
+    end
 end
 
 if formants(1) > 1000
