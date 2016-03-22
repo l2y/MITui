@@ -31,7 +31,7 @@ function createEnv(params) {
     return env;
 }
 
-var serialportname = 'COM4';
+var serialportname = 'COM15';
 var sp = new serialport.SerialPort(serialportname, {
 	baudRate: 9600,
 	dataBits: 8,
@@ -91,8 +91,8 @@ var previousWord = '';
 var recordingCount = 0;
 var currentWord = "";
 var newSession = true;
-//var uploadDir = "C:\\Users\\Cain\\workspace\\MITui\\recordings";
-var uploadDir = "C:\\Users\\Sarah Kelly\\Documents\\University\\SYDE 461\\Code\\Website\\recordings";
+var uploadDir = "C:\\Users\\Cain\\workspace\\MITui\\recordings";
+// var uploadDir = "C:\\Users\\Sarah Kelly\\Documents\\University\\SYDE 461\\Code\\Website\\recordings";
 var version = 0;
 
 //Lets define a port we want to listen to
@@ -123,24 +123,27 @@ function handleRequest(request, response){
 	  		parsedPitch = uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".txt"
 
 			fs.rename(file.path, form.uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".wav");
-			//exec('C:\\Users\\Cain\\workspace\\MITui\\pitch_detection_matlab.bat ' 
-			//	+ wavFile + ' ' + pitchTier + ' ' + parsedPitch);
+			exec('C:\\Users\\Cain\\workspace\\MITui\\praat_pitch_detection.bat ' 
+				+ wavFile + ' ' + pitchTier + ' ' + parsedPitch, function() {
+					setTimeout(function() {
+						if(recordingCount==1 && currentWord=='IAmGood'){
+							var spawn = require('child_process').spawn;
+							ls = spawn('cmd.exe',['/c','word_classification_matlab.bat 4 ' + version]);
+							ls.stdout.on('data',function(data){
+								console.log('stdout: ' + data);
+							});
+							ls.on('exit', function(code){
+								console.log('child process exited with code ' + code);
+							});
+						}
+					}, 1000);
+				});
 			
-			var spawn = require('child_process').spawn;
-			ls = spawn('cmd.exe',['/c','praat_pitch_detection.bat '+wavFile+' '+pitchTier+' '+parsedPitch]);
-			ls.stderr.on('data', function(data){
-				console.log('stderr: '+data);
-			});
-			if(recordingCount==1 && currentWord=='I Am Good'){
-				var spawn = require('child_process').spawn;
-				ls = spawn('cmd.exe',['/c','word_classification_matlab.bat 4 ' + parsedPitch]);
-				ls.stdout.on('data',function(data){
-					console.log('stdout: ' + data);
-				});
-				ls.on('exit', function(code){
-					console.log('child process exited with code ' + code);
-				});
-			}
+			// var spawn = require('child_process').spawn;
+			// ls = spawn('cmd.exe',['/c','praat_pitch_detection.bat '+wavFile+' '+pitchTier+' '+parsedPitch]);
+			// ls.stderr.on('data', function(data){
+			// 	console.log('stderr: '+data);
+			// });
 			response.end();
 		});
 
@@ -152,7 +155,10 @@ function handleRequest(request, response){
 		});
 	} else if (request.url == '/newSession') {
 		request.on('data',function(data){
-			currentWord = data;
+			currentWord = "";
+			currentWord += data;
+			currentWord = currentWord.replace(/ /g,'');
+			console.log(currentWord);
 			newSession = true;
 			recordingCount = 0;
 		});
@@ -171,14 +177,10 @@ function handleRequest(request, response){
 			console.log(word)
 			console.log(CurrentStep)
 			if(word=='Next Step'){
-				//setTimeout(function() {
-					pulseStream(1,1,syllableCount(previousWord), CurrentStep);
-				//},500);
+				pulseStream(1,1,syllableCount(previousWord), CurrentStep);
 			} else {
-				//setTimeout(function() {
-					previousWord = word;
-					pulseStream(1,1,syllableCount(word), CurrentStep);
-				//},300);
+				previousWord = word;
+				pulseStream(1,1,syllableCount(word), CurrentStep);
 			}
 		});
 	}

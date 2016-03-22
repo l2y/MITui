@@ -235,6 +235,7 @@ function postPulse(word, CurrentStep){
     xmlhttp.open("POST","http://localhost:80");
 	xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
 	xmlhttp.send(word+','+CurrentStep);
+    console.log("Send pulse");
 }
 
 function newSession( word ) {

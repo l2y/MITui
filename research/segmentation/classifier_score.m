@@ -1,4 +1,4 @@
-function [score,formants_actual] = classifier_score( phrase_index,absolute_path )
+function [score,formants_actual] = classifier_score( phrase_index, version )
 %function [formants_actual] = classifier_score( envelopevar, y, fs )
 
 %Get expected values
@@ -16,7 +16,7 @@ formants_expected=A';
 %Envelope Segmentation
 %[y,fs] = audioread('I Love You.wav');
 [y,fs] = audioread('I am Good.wav');
-%[y,fs] = audioread('C:/Users/Sarah Kelly/Documents/University/SYDE 461/Code/Website/recordings/I Am Good/0/1.wav');
+%[y,fs] = audioread('C:/Users/Cain/workspace/MITui/recordings/I Am Good/0/1.wav');
 r = 4;
 y = decimate(y,r);
 fs = fs/r;
@@ -31,10 +31,11 @@ envelopevar = rolVarWin(fenvelope,windowSize);
 %Pitch Segmentation
 
 %Using Pre-recorded
-fileID = fopen('./processedPitch/ParsedPitch I am Good.txt','r');
+%fileID = fopen('./processedPitch/ParsedPitch I am Good.txt','r');
 
 %Using Live
-%fileID = fopen(absolute_path,'r');
+absolute_path = sprintf('C:\\Users\\Cain\\workspace\\MITui\\recordings\\IAmGood\\%d\\1.txt',version);
+fileID = fopen(absolute_path,'r');
 
 formatSpec = '%f %f';
 sizeA = [2 Inf];
