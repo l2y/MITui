@@ -123,9 +123,8 @@ function handleRequest(request, response){
 	  		parsedPitch = uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".txt"
 
 			fs.rename(file.path, form.uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".wav");
-<<<<<<< HEAD
-			// exec('C:\\Users\\Cain\\workspace\\MITui\\pitch_detection_matlab.bat ' 
-			// 	+ wavFile + ' ' + pitchTier + ' ' + parsedPitch);
+			exec('C:\\Users\\Cain\\workspace\\MITui\\pitch_detection_matlab.bat ' 
+				+ wavFile + ' ' + pitchTier + ' ' + parsedPitch);
 			if(recordingCount==1 && currentWord=='I Am Good'){
 				var spawn = require('child_process').spawn;
 				ls = spawn('cmd.exe',['/c','word_classification_matlab.bat 4 %1']);
@@ -136,18 +135,6 @@ function handleRequest(request, response){
 					console.log('child process exited with code ' + code);
 				});
 			}
-=======
-			exec('C:\\Users\\Cain\\workspace\\MITui\\praat_pitch_detection.bat ' 
-				+ wavFile + ' ' + pitchTier + ' ' + parsedPitch);
-			var spawn = require('child_process').spawn;
-			ls = spawn('cmd.exe',['/c','word_classification_matlab.bat 4 %1']);
-			ls.stdout.on('data',function(data){
-				console.log('stdout: ' + data);
-			});
-			ls.on('exit', function(code){
-				console.log('child process exited with code ' + code);
-			});
->>>>>>> origin/master
 			response.end();
 		});
 
