@@ -1,5 +1,8 @@
 %fs here is desired FS
 function[rwinvec,fEnv] = pitchseg(ypitch,t,fs,fEnv,winSz)
+    
+    % do kernel estimation before  the resampling process
+    [pitch,upitches] = kerneltrim(ypitch);
     [pitchrs,tr] = resample(ypitch,t,fs,'linear');
     
     % length of fenvelope is just L
