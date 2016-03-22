@@ -31,7 +31,7 @@ function createEnv(params) {
     return env;
 }
 
-var serialportname = 'COM3';
+var serialportname = 'COM4';
 var sp = new serialport.SerialPort(serialportname, {
 	baudRate: 9600,
 	dataBits: 8,
@@ -91,8 +91,8 @@ var previousWord = '';
 var recordingCount = 0;
 var currentWord = "";
 var newSession = true;
-var uploadDir = "C:\\Users\\Cain\\workspace\\MITui\\recordings";
-// var uploadDir = "C:\\Users\\Sarah Kelly\\Documents\\University\\SYDE 461\\Code\\Website\\recordings";
+//var uploadDir = "C:\\Users\\Cain\\workspace\\MITui\\recordings";
+var uploadDir = "C:\\Users\\Sarah Kelly\\Documents\\University\\SYDE 461\\Code\\Website\\recordings";
 var version = 0;
 
 //Lets define a port we want to listen to
@@ -123,8 +123,8 @@ function handleRequest(request, response){
 	  		parsedPitch = uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".txt"
 
 			fs.rename(file.path, form.uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".wav");
-			exec('C:\\Users\\Cain\\workspace\\MITui\\pitch_detection_matlab.bat ' 
-				+ wavFile + ' ' + pitchTier + ' ' + parsedPitch);
+			//exec('C:\\Users\\Cain\\workspace\\MITui\\pitch_detection_matlab.bat ' 
+				//+ wavFile + ' ' + pitchTier + ' ' + parsedPitch);
 			if(recordingCount==1 && currentWord=='I Am Good'){
 				var spawn = require('child_process').spawn;
 				ls = spawn('cmd.exe',['/c','word_classification_matlab.bat 4 %1']);

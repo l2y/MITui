@@ -14,7 +14,8 @@ A = fscanf(fileID, '%d %d %d', sizeA);
 formants_expected=A';
 
 %Envelope Segmentation
-[y,fs] = audioread('I am Good.wav');
+%[y,fs] = audioread('I am Good.wav');
+[y,fs] = audioread('C:/Users/Sarah Kelly/Documents/University/SYDE 461/Code/Website/recordings/I Am Good/0/1.wav');
 r = 4;
 y = decimate(y,r);
 fs = fs/r;
