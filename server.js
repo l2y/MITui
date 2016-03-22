@@ -31,7 +31,7 @@ function createEnv(params) {
     return env;
 }
 
-var serialportname = 'COM15';
+var serialportname = 'COM3';
 var sp = new serialport.SerialPort(serialportname, {
 	baudRate: 9600,
 	dataBits: 8,
@@ -166,6 +166,20 @@ function handleRequest(request, response){
 		request.on('data',function(data){
 			recordingCount++;
 		});
+	}
+	else if (request.url == '/loadGraph1') {
+
+		var img = fs.readFile('some-graph-1.png');
+     	response.writeHead(200, {'Content-Type': 'image/png' });
+     	response.write('some-graph-1.png');
+     	response.end();
+	}
+	else if (request.url == '/loadGraph2') {
+
+		var img = fs.readFile('some-graph-2.png');
+     	response.writeHead(200, {'Content-Type': 'image/png' });
+     	response.write('some-graph-2.png')
+     	response.end();
 	}
 	else
 	{

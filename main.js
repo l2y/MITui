@@ -56,6 +56,15 @@ var instructionAudio = [step1, step2, step3, step4, step5];
 
 window.onload = function(e) {   
     beginSession();
+    loadGraph1(function(data) {
+        console.log(data);
+        document.getElementById("timing-pitch-graph-image").src += data;  
+    });
+
+    // loadGraph2(function(data) {
+    //     console.log(data);
+    //     document.getElementById("classification-graph-image").src += data;  
+    // });
 }
 
 function startIt(w) {
@@ -66,7 +75,7 @@ function startIt(w) {
     $("#word").text(w);
     instructionAudio[CurrentStep].pause();
     instructionAudio[CurrentStep].currentTime = 0;
-    
+
     $('#icon-instruction').addClass('show');
     $('#icon-instruction').removeClass('hidden');
     $("#start-screen").addClass("fadeOut");
@@ -117,6 +126,7 @@ function toggleBreathe(step) {
 
 function gotBuffers( buffers ) {
     audioRecorder.exportWAV( doneEncoding );
+    audioRecorder.clear();
 }
 
 function doneEncoding( blob ) {
@@ -129,6 +139,48 @@ function doneEncoding( blob ) {
   	xmlhttp.open("POST","http://localhost:80/upload");
 	xmlhttp.send(fd);
     console.log("Send uploads")
+}
+
+function loadGraph1() {
+    
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST","http://localhost:80/loadGraph1");
+    xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4) 
+        {
+            if(xmlhttp.status == 200)
+            {
+                console.log(xmlhttp.responseText);
+                document.getElementById("classification-graph-image").src = xmlhttp.responseText;
+            }
+            else
+                dump("Error loading page\n");
+        }
+    }
+    xmlhttp.send(word);
+}
+
+function loadGraph2() {
+    
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST","http://localhost:80/loadGraph1");
+    xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4) 
+        {
+            if(xmlhttp.status == 200)
+            {
+                console.log(xmlhttp.responseText);
+                document.getElementById("classification-graph-image").src = xmlhttp.responseText;
+            }
+            else
+                dump("Error loading page\n");
+        }
+    }
+    xmlhttp.send(word);
 }
 
 function convertToMono( input ) {
@@ -453,7 +505,7 @@ function beginSession() {
     
     document.getElementById("counter").innerHTML = recordingCounter[CurrentStep];
     counter = recordingCounter[CurrentStep];
-    
+
     //next screen
     if (CurrentStep < INSTRUCTIONS.length) {
         // Play instructions
@@ -487,15 +539,31 @@ function beginSession() {
         }
     //stats/restart screen
     } else {
+
+        loadGraph1(function(data) {
+            if (err) throw err;
+            console.log(data);
+            document.getElementById("timing-pitch-graph-image").src = data;  
+        });
+
+        // loadGraph2(function(data) {
+        //     if (err) throw err;
+        //     console.log(data);
+        //     document.getElementById("classification-graph-image").src = data;  
+        // });
+
         var scores = getScores();
         
         $('#timing-score').innerHTML = "Timing Score:" + scores[0];
         $('#pitch-score').innerHTML = "Pitch Score:" + scores[1];
         $('#classification-score').innerHTML = "Classification Score:" + scores[2];
+
+        // document.getElementById("timing-pitch-graph-image").src = "images/button-hover.png";  
+        // document.getElementById("classification-graph-image").src = "images/button-hover.png";  
         
-        document.getElementById("timing-pitch-graph-image").src = "images/button-hover.png";  
-        document.getElementById("classification-graph-image").src = "images/button-hover.png";  
-        
+        document.getElementById("timing-pitch-graph-image").src = loadGraph1;   
+        // document.getElementById("classification-graph-image").src = loadGraph2;
+
         $("#restart-screen").addClass("show");
         $("#restart-screen").removeClass("hidden");
         
