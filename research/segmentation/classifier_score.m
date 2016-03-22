@@ -83,43 +83,46 @@ i = 1;
 bar_count = 1;
 while(i<(length(lcs)))
     if(bar_count<=syllable_count)
-        section = y(lcs(i):lcs(i+1));
         middle = (lcs(i)+lcs(i+1))/2;
-        
-%         mtxSamples = zeros(fs*0.2, length(-2:2));
-        rg = (1:31);
+%CODE FOR RANGE OF WINDOWS
+
+        rg = (1:21);
         mtxFormants = zeros(length(rg),3);
         sampleRanges = zeros(length(rg),2);
         ofsC = ceil(length(rg)/2);
         
         for n = rg
-            ofs = (n-ofsC)*fs*0.025;
+            ofs = (n-ofsC)*fs*0.015;
             %floor(middle+ofs)
             % here, sample is a column vector.
             % let's make the rows different samples.
             n1 = floor(middle+ofs);
-            n2 = floor(middle+ofs+(fs*0.2));
+            n2 = floor(middle+ofs+(fs*0.015));
 
-            sample = y(floor(middle+ofs):floor(middle+ofs+(fs*0.2)));
-            mtxFormants(n,:) = getLPC(sample,fs);
-            sampleRanges(n,:) = [n1 n2]; 
+            sample = y(n1:n2);
+            mtxFormants(n,:) = getLPC(sample,fs,4);
+            %sampleRanges(n,:) = [n1 n2]; 
             
         end
         
-        
-        
-%         winLoc = (sampleRanges(:,1) + sampleRanges(:,2))/2;
+        %winLoc = (sampleRanges(:,1) + sampleRanges(:,2))/2;
 %         
 %         figure()
 %         scatter(winLoc,mtxFormants(:,1));
 %         hold on
 %         scatter(winLoc,mtxFormants(:,2));
 %         scatter(winLoc,mtxFormants(:,3));
+        %sample = y(floor(middle-fs*.01):floor(middle+fs*.01));
+        %formants = getLPC(sample,fs,4);
+        fMedian = [median(mtxFormants(:,1)) ...
+            median(mtxFormants(:,2)) median(mtxFormants(:,3))];
+        fMean = [median(mtxFormants(:,1)) ...
+            median(mtxFormants(:,2)) median(mtxFormants(:,3))];
         
+        fAvgavg = (fMean + fMedian) / 2;
         
-        sample = y(floor(middle-fs*.02):floor(middle+fs*.02));
-        formants = getLPC(sample,fs);
-        formants_actual(bar_count,:) = formants_actual(bar_count,:)+formants;
+        formants_actual(bar_count,:) = formants_actual(bar_count,:)+fAvgavg;
+        
     end
     if(bar_count==4)
         bar_count=1;
