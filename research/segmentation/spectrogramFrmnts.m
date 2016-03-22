@@ -1,8 +1,14 @@
 %% the purpose of this function is to create a spectrogram
 % along with the formants.
-function [a] = spectrogramFrmnts()
+function [a] = spectrogramFrmnts(stFilename)
     % downsample
-    [y,fs] = audioread('I am Good.wav');
+    [y,fs] = audioread([stFilename '.wav']);
+    
+    s = size(y);
+    if s(2) == 2
+    y = (y(:,1)+y(:,2))/2;
+    end
+    
     r = 4;
     y = decimate(y,r);
     fs = fs/r;
@@ -53,7 +59,7 @@ function [a] = spectrogramFrmnts()
     winSz = (1.5e4 / 4);
     envelopevar = envelopeseg(y,fs,winSz);
     
-    fileId = fopen('./processedPitch/ParsedPitch I am Good.txt','r');
+    fileId = fopen(['./processedPitch/ParsedPitch ' stFilename '.txt'],'r');
     formatSpec = '%f %f';
     sizeA = [2 Inf];   
     A = fscanf(fileId,formatSpec,sizeA);
@@ -81,7 +87,7 @@ function [a] = spectrogramFrmnts()
     ylabel('Frequency (Hz)');
     ylim([0 5000]);
     
-    saveas(gcf, 'output', 'jpg');
+    saveas(gcf, ['spectrogram_' stFilename], 'jpg');
     
    
 end

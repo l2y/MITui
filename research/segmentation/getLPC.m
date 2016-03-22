@@ -1,5 +1,8 @@
 function [ formants ] = getLPC(y,fs, order)
 
+if isrow(y)
+    y = y';
+end
 w = hamming(length(y));
 yw = y.*w;
 

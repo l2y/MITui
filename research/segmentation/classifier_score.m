@@ -15,7 +15,7 @@ formants_expected=A';
 
 %Envelope Segmentation
 %[y,fs] = audioread('I Love You.wav');
-[y,fs] = audioread('I am Good.wav');
+[y,fs] = audioread('Water.wav');
 %[y,fs] = audioread('C:/Users/Cain/workspace/MITui/recordings/I Am Good/0/1.wav');
 r = 4;
 y = decimate(y,r);
@@ -31,11 +31,11 @@ envelopevar = rolVarWin(fenvelope,windowSize);
 %Pitch Segmentation
 
 %Using Pre-recorded
-%fileID = fopen('./processedPitch/ParsedPitch I am Good.txt','r');
+fileID = fopen('./processedPitch/ParsedPitch 1.txt','r');
 
 %Using Live
-absolute_path = sprintf('C:\\Users\\Cain\\workspace\\MITui\\recordings\\IAmGood\\%d\\1.txt',version);
-fileID = fopen(absolute_path,'r');
+%absolute_path = sprintf('C:\\Users\\Cain\\workspace\\MITui\\recordings\\IAmGood\\%d\\1.txt',version);
+%fileID = fopen(absolute_path,'r');
 
 formatSpec = '%f %f';
 sizeA = [2 Inf];
@@ -44,19 +44,15 @@ fclose(fileID);
 Fs = 44100 / 4;
 t = A(1,:);
 pitch = A(2,:);
-pitch = normalizesig(pitch,0,1);
+
 t = [0 t (length(fenvelope))/Fs];
 pitch = [pitch(1) pitch pitch(length(pitch))];
-[pitchrs,tr] = resample(pitch,t,Fs,'linear');
-if abs(length(pitchrs) - length(fenvelope)) > 0
-    minlen = min(length(envelopevar),length(fenvelope));
-    pitchrs = pitchrs(1:minlen);
-    tr = tr(1:minlen);
-    fenvelope = fenvelope(1:minlen);
-end
-smptr = (1:length(tr));
-windowSize = (1.5e4/4);
-rwinvec = rolVarWin(pitchrs,windowSize);
+
+%%%%%%
+[rwinvec,upitches,pitchrs] = pitchseg(pitch,t,fs,length(y),windowSize);
+
+%upitches: mean pitch values (hi-lo)
+%pitchrs: pitch signal
 
 
 %plot(smptr,rwinvec);
@@ -85,6 +81,8 @@ formants_actual = zeros(syllable_count,3);
 i = 1;
 bar_count = 1;
 while(i<(length(lcs)))
+    high_pitch = 1000;
+    low_pitch=1000;
     if(bar_count<=syllable_count)
         middle = (lcs(i)+lcs(i+1))/2;
 %CODE FOR RANGE OF WINDOWS
