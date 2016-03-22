@@ -14,8 +14,8 @@ function [a] = spectrogramFrmnts()
     figure();
     [s,f,t] = spectrogram(y,w,olap,N,fs);
     clims = [-70 25];
+    fig = figure(1);
     imagesc(t,f,db(abs(s)),clims);
-    colorbar;
     colormap(flipud(gray));
     axis xy;
     
@@ -77,17 +77,11 @@ function [a] = spectrogramFrmnts()
         line([tCurr tCurr], [0 5000], 'Color',clrPnk,'LineWidth',2);
     end
     
+    xlabel('Time (sec)');
+    ylabel('Frequency (Hz)');
     ylim([0 5000]);
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    saveas(gcf, 'output', 'jpg');
     
    
 end
