@@ -145,7 +145,7 @@ function doneEncoding( blob ) {
 function loadGraph1( num ) {
     
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("POST","http://localhost:80/loadGraph" + num);
+    xmlhttp.open("POST","http://localhost:80/loadGraphReal");
     xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
 
     xmlhttp.onreadystatechange = function () {
@@ -378,7 +378,8 @@ function gotStream(stream) {
                                     _audioArray[stepToAudio[CurrentStep]].play();
                                 if (CurrentStep != 0)
                                     updateAnalysers();
-
+                                if (CurrentStep == 3)
+                                    loadGraph1(9)
                                 var timeout = 16000;
                                 if (CurrentStep == 0) {
                                     timeout = 32000;
@@ -407,49 +408,49 @@ function setAudio(){
         var audio2 = new Audio('sound/Water (higher pitch)_hum_sing.wav');
         var audio3 = new Audio('sound/Water (higher pitch)_fade.wav');
         var audio4 = new Audio('sound/Water_question.wav');
-        loadGraph1(1);
+        // loadGraph1(1);
         _audioArray = [audio1, audio2, audio3, audio4];
     } else if (w == 'Hello') {
         var audio1 = new Audio('sound/Hello.wav');
         var audio2 = new Audio('sound/Hello_hum_sing.wav');
         var audio3 = new Audio('sound/Hello_fade.wav');
         var audio4 = new Audio('sound/Hello_question.wav');
-        loadGraph1(2);
+        // loadGraph1(2);
         _audioArray = [audio1, audio2, audio3, audio4];
     } else if (w == 'How Are You'){
         var audio1 = new Audio('sound/How Are You.wav');
         var audio2 = new Audio('sound/How Are You_hum_sing.wav');
         var audio3 = new Audio('sound/How Are You_fade.wav');
         var audio4 = new Audio('sound/How Are You_question.wav');
-        loadGraph1(3);
+        // loadGraph1(3);
         _audioArray = [audio1, audio2, audio3, audio4];
     } else if (w == 'I Am Good'){
         var audio1 = new Audio('sound/I Am Good.wav');
         var audio2 = new Audio('sound/I Am Good_hum_sing.wav');
         var audio3 = new Audio('sound/I Am Good_fade.wav');
         var audio4 = new Audio('sound/I Am Good_question.wav');
-        loadGraph1(4);
+        // loadGraph1(4);
         _audioArray = [audio1, audio2, audio3, audio4];
     } else if (w == 'I Love You'){
         var audio1 = new Audio('sound/I Love You.wav');
         var audio2 = new Audio('sound/I Love You_hum_sing.wav');
         var audio3 = new Audio('sound/I Love You_fade.wav');
         var audio4 = new Audio('sound/I Love You_question.wav');
-        loadGraph1(5);
+        // loadGraph1(5);
         _audioArray = [audio1, audio2, audio3, audio4];
     } else if (w == 'Ice Cream'){
         var audio1 = new Audio('sound/Ice Cream.wav');
         var audio2 = new Audio('sound/Ice Cream_hum_sing.wav');
         var audio3 = new Audio('sound/Ice Cream_fade.wav');
         var audio4 = new Audio('sound/Ice Cream_question.wav');
-        loadGraph1(6);
+        // loadGraph1(6);
         _audioArray = [audio1, audio2, audio3, audio4];
     } else if (w == 'Thank You'){
         var audio1 = new Audio('sound/Thank You.wav');
         var audio2 = new Audio('sound/Thank You_hum_sing.wav');
         var audio3 = new Audio('sound/Thank You_fade.wav');
         var audio4 = new Audio('sound/Thank You_question.wav');
-        loadGraph1(7);
+        // loadGraph1(7);
         _audioArray = [audio1, audio2, audio3, audio4];
     }
     return _audioArray;

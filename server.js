@@ -66,6 +66,25 @@ function pulseStream(barPosition,beatPosition,Syllables, CurrentStep) {
 	}
 }
 
+function wordIds(word) {
+	switch(word) {
+		case "Water":
+			return 1;
+		case "Hello":
+			return 2;
+		case "HowAreYou":
+			return 3;
+		case "IAmGood":
+			return 4;
+		case "ILoveYou":
+			return 5;
+		case "IceCream":
+			return 6;
+		case "ThankYou":
+			return 7;
+	}
+}
+
 function syllableCount(word) {
 	switch(word) {
 		case "Water":
@@ -122,22 +141,28 @@ function handleRequest(request, response){
 	  		pitchTier = uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".PitchTier"
 	  		parsedPitch = uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".txt"
 
-			fs.rename(file.path, form.uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".wav");
-			exec('C:\\Users\\Cain\\workspace\\MITui\\praat_pitch_detection.bat ' 
-				+ wavFile + ' ' + pitchTier + ' ' + parsedPitch, function() {
-					setTimeout(function() {
-						if(recordingCount==1 && currentWord=='IAmGood'){
-							var spawn = require('child_process').spawn;
-							ls = spawn('cmd.exe',['/c','word_classification_matlab.bat 4 ' + version]);
-							ls.stdout.on('data',function(data){
-								console.log('stdout: ' + data);
-							});
-							ls.on('exit', function(code){
-								console.log('child process exited with code ' + code);
-							});
-						}
-					}, 2000);
-				});
+			fs.rename(file.path, form.uploadDir + "\\" + currentWord + "\\" + version + "\\" + recordingCount + ".wav", function() {
+				setTimeout(function() {
+					exec('C:\\Users\\Cain\\workspace\\MITui\\praat_pitch_detection.bat ' 
+					+ wavFile + ' ' + pitchTier + ' ' + parsedPitch, function() {
+
+						// GOTTA FIX THIS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+						setTimeout(function() {
+							if(recordingCount==1){
+								var wordId = wordIds(currentWord);
+								var spawn = require('child_process').spawn;
+								ls = spawn('cmd.exe',['/c','word_classification_matlab.bat ' + wordId + ' ' + version + ' ' + recordingCount]);
+								ls.stdout.on('data',function(data){
+									console.log('stdout: ' + data);
+								});
+								ls.on('exit', function(code){
+									console.log('child process exited with code ' + code);
+								});
+							}
+						}, 500);
+					});
+				}, 100);
+			});
 			
 			// var spawn = require('child_process').spawn;
 			// ls = spawn('cmd.exe',['/c','praat_pitch_detection.bat '+wavFile+' '+pitchTier+' '+parsedPitch]);
@@ -216,6 +241,15 @@ function handleRequest(request, response){
      	response.write('research/segmentation/spectrogram_Ice Cream.jpg');
      	response.end();
 	}
+
+	else if (request.url == '/loadGraphReal') {
+
+		var img = fs.readFile('some-graph.jpg');
+     	response.writeHead(200, {'Content-Type': 'image/jpg' });
+     	response.write('some-graph.jpg');
+     	response.end();
+	}
+
 	else
 	{
 		word = '';

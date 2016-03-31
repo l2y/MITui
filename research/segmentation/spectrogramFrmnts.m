@@ -1,6 +1,6 @@
 %% the purpose of this function is to create a spectrogram
 % along with the formants.
-function [a] = spectrogramFrmnts(stFilename, parsedPitch)
+function [a] = spectrogramFrmnts(stFilename, parsedPitch, version)
     % downsample
     [y,fs] = audioread(stFilename);
     
@@ -87,7 +87,7 @@ function [a] = spectrogramFrmnts(stFilename, parsedPitch)
     ylabel('Frequency (Hz)');
     ylim([0 5000]);
     
-    saveas(gcf, ['spectrogram_' stFilename], 'jpg');
+    saveas(gcf, 'C:\Users\Cain\workspace\MITui\some-graph', 'jpg');
     
    
 end
