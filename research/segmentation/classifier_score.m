@@ -15,8 +15,11 @@ formants_expected=A';
 
 %Envelope Segmentation
 %[y,fs] = audioread('I Love You.wav');
-[y,fs] = audioread('Water.wav');
-%[y,fs] = audioread('C:/Users/Cain/workspace/MITui/recordings/I Am Good/0/1.wav');
+%[y,fs] = audioread('Water.wav');
+%wavFile = sprintf('C:/Users/Cain/workspace/MITui/recordings/IAmGood/%d/1.wav', version);
+wavFile = 'C:/Users/Cain/workspace/MITui/recordings/IAmGood/5/1.wav';
+[y,fs] = audioread(wavFile);
+
 r = 4;
 y = decimate(y,r);
 fs = fs/r;
@@ -31,11 +34,11 @@ envelopevar = rolVarWin(fenvelope,windowSize);
 %Pitch Segmentation
 
 %Using Pre-recorded
-fileID = fopen('./processedPitch/ParsedPitch 1.txt','r');
+%fileID = fopen('./processedPitch/ParsedPitch 1.txt','r');
 
 %Using Live
-%absolute_path = sprintf('C:\\Users\\Cain\\workspace\\MITui\\recordings\\IAmGood\\%d\\1.txt',version);
-%fileID = fopen(absolute_path,'r');
+absolute_path = 'C:\\Users\\Cain\\workspace\\MITui\\recordings\\IAmGood\\5\\1.txt';
+fileID = fopen(absolute_path,'r');
 
 formatSpec = '%f %f';
 sizeA = [2 Inf];
@@ -145,6 +148,8 @@ while(i<(length(lcs)))
     i=i+1;
 end
 
+%%% JEROMES SHIT %%%
+spectrogramFrmnts(wavFile, absolute_path);
 
 formants_actual = formants_actual./4;
 

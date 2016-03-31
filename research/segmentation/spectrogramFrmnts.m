@@ -1,8 +1,8 @@
 %% the purpose of this function is to create a spectrogram
 % along with the formants.
-function [a] = spectrogramFrmnts(stFilename)
+function [a] = spectrogramFrmnts(stFilename, parsedPitch)
     % downsample
-    [y,fs] = audioread([stFilename '.wav']);
+    [y,fs] = audioread(stFilename);
     
     s = size(y);
     if s(2) == 2
@@ -59,7 +59,7 @@ function [a] = spectrogramFrmnts(stFilename)
     winSz = (1.5e4 / 4);
     envelopevar = envelopeseg(y,fs,winSz);
     
-    fileId = fopen(['./processedPitch/ParsedPitch ' stFilename '.txt'],'r');
+    fileId = fopen([parsedPitch],'r');
     formatSpec = '%f %f';
     sizeA = [2 Inf];   
     A = fscanf(fileId,formatSpec,sizeA);

@@ -31,7 +31,7 @@ function createEnv(params) {
     return env;
 }
 
-var serialportname = 'COM3';
+var serialportname = 'COM15';
 var sp = new serialport.SerialPort(serialportname, {
 	baudRate: 9600,
 	dataBits: 8,
@@ -136,7 +136,7 @@ function handleRequest(request, response){
 								console.log('child process exited with code ' + code);
 							});
 						}
-					}, 1000);
+					}, 2000);
 				});
 			
 			// var spawn = require('child_process').spawn;
@@ -169,16 +169,51 @@ function handleRequest(request, response){
 	}
 	else if (request.url == '/loadGraph1') {
 
-		var img = fs.readFile('some-graph-1.png');
+		var img = fs.readFile('research/segmentation/spectrogram_Water.jpg');
      	response.writeHead(200, {'Content-Type': 'image/png' });
-     	response.write('some-graph-1.png');
+     	response.write('research/segmentation/spectrogram_Water.jpg');
      	response.end();
 	}
 	else if (request.url == '/loadGraph2') {
-
-		var img = fs.readFile('some-graph-2.png');
+		
+		var img = fs.readFile('research/segmentation/spectrogram_Hello.jpg');
      	response.writeHead(200, {'Content-Type': 'image/png' });
-     	response.write('some-graph-2.png')
+     	response.write('research/segmentation/spectrogram_Hello.jpg');
+     	response.end();
+	}
+	else if (request.url == '/loadGraph3') {
+		
+		var img = fs.readFile('research/segmentation/spectrogram_How Are You.jpg');
+     	response.writeHead(200, {'Content-Type': 'image/png' });
+     	response.write('research/segmentation/spectrogram_How Are You.jpg');
+     	response.end();
+	}
+	else if (request.url == '/loadGraph4') {
+		
+		var img = fs.readFile('research/segmentation/spectrogram_I Am Good.jpg');
+     	response.writeHead(200, {'Content-Type': 'image/png' });
+     	response.write('research/segmentation/spectrogram_I Am Good.jpg');
+     	response.end();
+	}
+	else if (request.url == '/loadGraph5') {
+		
+		var img = fs.readFile('research/segmentation/spectrogram_I Love You.jpg');
+     	response.writeHead(200, {'Content-Type': 'image/png' });
+     	response.write('research/segmentation/spectrogram_I Love You.jpg');
+     	response.end();
+	}
+	else if (request.url == '/loadGraph6') {
+		
+		var img = fs.readFile('research/segmentation/spectrogram_Ice Cream.jpg');
+     	response.writeHead(200, {'Content-Type': 'image/png' });
+     	response.write('research/segmentation/spectrogram_Ice Cream.jpg');
+     	response.end();
+	}
+	else if (request.url == '/loadGraph7') {
+
+		var img = fs.readFile('research/segmentation/spectrogram_Ice Cream.jpg');
+     	response.writeHead(200, {'Content-Type': 'image/png' });
+     	response.write('research/segmentation/spectrogram_Ice Cream.jpg');
      	response.end();
 	}
 	else
